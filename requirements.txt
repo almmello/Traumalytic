@@ -5,3 +5,4 @@ openpyxl
 scipy
 matplotlib
 seaborn
+cryptography
