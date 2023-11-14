@@ -1,5 +1,8 @@
 import streamlit as st
 import pandas as pd
+from cryptography.fernet import Fernet
+from dotenv import load_dotenv
+import os
 from calculations import (
     calcular_clusters_ptci, 
     calcular_clusters_pcl5, 
@@ -13,8 +16,23 @@ from calculations import (
 )
 
 def carregar_dados():
-    # Carregar dados aqui
-    data = pd.read_excel('Banco LEC PCL5 PTCI.xlsx')
+    # Carregar as variáveis de ambiente
+    load_dotenv()
+
+    # Pegar a chave de criptografia do arquivo .env
+    chave_criptografia = os.getenv('FILE_ENCRYPTION_KEY')
+    fernet = Fernet(chave_criptografia.encode())
+
+    # Caminho do arquivo criptografado
+    nome_arquivo_criptografado = 'Banco LEC PCL5 PTCI.xlsx.crp'
+
+    # Descriptografar o arquivo
+    with open(nome_arquivo_criptografado, 'rb') as arquivo_criptografado:
+        dados_criptografados = arquivo_criptografado.read()
+        dados_descriptografados = fernet.decrypt(dados_criptografados)
+
+    # Carregar os dados descriptografados em um DataFrame do pandas
+    data = pd.read_excel(pd.io.common.BytesIO(dados_descriptografados))
     return data
 
 def mostrar_analise_descritiva():
