@@ -3,40 +3,26 @@ import pandas as pd
 import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
-from cryptography.fernet import Fernet
-from dotenv import load_dotenv
-import os
+
 from calculations import (
     calcular_correlacao,
     criar_dataframe_para_correlacao
 )
 
-def carregar_dados():
-    # Carregar as variáveis de ambiente
-    load_dotenv()
-
-    # Pegar a chave de criptografia do arquivo .env
-    chave_criptografia = os.getenv('FILE_ENCRYPTION_KEY')
-    fernet = Fernet(chave_criptografia.encode())
-
-    # Caminho do arquivo criptografado
-    nome_arquivo_criptografado = 'Banco LEC PCL5 PTCI.xlsx.crp'
-
-    # Descriptografar o arquivo
-    with open(nome_arquivo_criptografado, 'rb') as arquivo_criptografado:
-        dados_criptografados = arquivo_criptografado.read()
-        dados_descriptografados = fernet.decrypt(dados_criptografados)
-
-    # Carregar os dados descriptografados em um DataFrame do pandas
-    data = pd.read_excel(pd.io.common.BytesIO(dados_descriptografados))
-    return data
+# Importar a classe DataLoader do diretório pai
+import sys
+sys.path.append('..')  # Adiciona o diretório pai ao sys.path
+from data_loader import DataLoader
 
 def mostrar_analise_correlacao():
     st.title("Análise de Correlação")
 
+    # Inicializar o DataLoader
+    data_loader = DataLoader()
+
     # Carregar e armazenar os dados no início da sessão
     if 'data' not in st.session_state:
-        st.session_state['data'] = carregar_dados()
+        st.session_state['data'] = data_loader.carregar_dados()
 
 
     # Botão para calcular a correlação entre os escores totais da PCL-5 e PTCI

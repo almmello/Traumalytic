@@ -1,10 +1,10 @@
 import streamlit as st
 from auth import mostrar_tela_login
-import analise_descritiva
-import distribuicao_sexo
-import analise_normalidade
-import analise_correlacao
-import teste_t_student
+from modulos import analise_descritiva
+from modulos import distribuicao_sexo
+from modulos import analise_normalidade
+from modulos import analise_correlacao
+from modulos import teste_t_student
 
 def main():
     # Inicialização das variáveis de sessão

@@ -17,8 +17,9 @@ def mostrar_tela_login():
     Mostra a tela de login e verifica as credenciais.
     """
     st.sidebar.title("Login")
-    username = st.sidebar.text_input("Usuário")
-    password = st.sidebar.text_input("Senha", type="password")
+    username = st.sidebar.text_input("Usuário", autocomplete="username")
+    password = st.sidebar.text_input("Senha", type="password", autocomplete="current-password")
+
 
     # Modo debug para diagnóstico
     if DEBUG_MODE:

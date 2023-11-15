@@ -1,9 +1,7 @@
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
-from cryptography.fernet import Fernet
-from dotenv import load_dotenv
-import os
+
 from calculations import (
     testar_normalidade,
     criar_histograma,
@@ -12,25 +10,10 @@ from calculations import (
     calcular_p_valor_normal
 )
 
-def carregar_dados():
-    # Carregar as variáveis de ambiente
-    load_dotenv()
-
-    # Pegar a chave de criptografia do arquivo .env
-    chave_criptografia = os.getenv('FILE_ENCRYPTION_KEY')
-    fernet = Fernet(chave_criptografia.encode())
-
-    # Caminho do arquivo criptografado
-    nome_arquivo_criptografado = 'Banco LEC PCL5 PTCI.xlsx.crp'
-
-    # Descriptografar o arquivo
-    with open(nome_arquivo_criptografado, 'rb') as arquivo_criptografado:
-        dados_criptografados = arquivo_criptografado.read()
-        dados_descriptografados = fernet.decrypt(dados_criptografados)
-
-    # Carregar os dados descriptografados em um DataFrame do pandas
-    data = pd.read_excel(pd.io.common.BytesIO(dados_descriptografados))
-    return data
+# Importar a classe DataLoader do diretório pai
+import sys
+sys.path.append('..')  # Adiciona o diretório pai ao sys.path
+from data_loader import DataLoader
 
 def formatar_p_valor(p_valor):
     return f"{p_valor:.2f}" if p_valor > 0.0001 else f"{p_valor:.2e}"
@@ -53,9 +36,12 @@ def interpretar_resultados_b(p_valor):
 def mostrar_analise_normalidade():
     st.title("Análise de Normalidade")
 
+    # Inicializar o DataLoader
+    data_loader = DataLoader()
+
     # Carregar e armazenar os dados no início da sessão
     if 'data' not in st.session_state:
-        st.session_state['data'] = carregar_dados()
+        st.session_state['data'] = data_loader.carregar_dados()
 
     # Seleção da variável de interesse
     st.write("Escolha a Variável para Análise")
