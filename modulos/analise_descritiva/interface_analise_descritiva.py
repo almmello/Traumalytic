@@ -1,5 +1,5 @@
 import streamlit as st
-from .processo_analise_descritiva import (      
+from .processo_analise_descritiva import (
     processar_exibir_clusters_ptci,
     processar_exibir_clusters_pcl5,
     processar_estatisticas_idade,
@@ -7,7 +7,10 @@ from .processo_analise_descritiva import (
     processar_estatisticas_escore_total_ptci,
     processar_estatisticas_clusters_pcl5,
     processar_estatisticas_clusters_ptci,
-    processar_calculo_distribuicao_por_sexo
+    processar_medidas_tendencia_central,
+    processar_medidas_dispersao,
+    processar_frequencia_categoricas,
+
 )
 
 from .conteudo_analise_descritiva import (
@@ -18,7 +21,9 @@ from .conteudo_analise_descritiva import (
     explicar_estatisticas_escore_total_ptci,
     explicar_estatisticas_clusters_pcl5,
     explicar_estatisticas_clusters_ptci,
-    explicar_calculo_distribuicao_por_sexo
+    explicar_medidas_tendencia_central,
+    explicar_medidas_dispersao,
+    explicar_frequencia_categoricas,
 )
 
 def mostrar_analise_descritiva():
@@ -52,9 +57,21 @@ def mostrar_analise_descritiva():
     if st.button('Calcular Estatísticas dos Clusters PTCI'):
         processar_estatisticas_clusters_ptci()
 
-    explicar_calculo_distribuicao_por_sexo()
-    if st.button('Calcular Distribuição por Sexo'):
-        processar_calculo_distribuicao_por_sexo()
+    # Seção para Medidas de Tendência Central
+    explicar_medidas_tendencia_central()
+    if st.button('Calcular Medidas de Tendência Central'):
+        processar_medidas_tendencia_central()
+
+    # Seção para Medidas de Dispersão
+    explicar_medidas_dispersao()
+    if st.button('Calcular Medidas de Dispersão'):
+        processar_medidas_dispersao()
+
+    # Seção para Frequência de Variáveis Categóricas
+    explicar_frequencia_categoricas()
+    if st.button('Calcular Frequência de Variáveis Categóricas'):
+        processar_frequencia_categoricas()
+    
 
 # Chamada da função principal
 if __name__ == "__main__":

@@ -6,7 +6,7 @@ from scipy.stats import probplot
 import numpy as np
 
 
-# Funções Auxiliáres
+# Funções Auxiliares
 def calcular_clusters_ptci_e_retornar(data):
     clusters_ptci = {
         'Cluster_A': ['PTCI02', 'PTCI03', 'PTCI04', 'PTCI05', 'PTCI06', 'PTCI09', 'PTCI12', 'PTCI14', 'PTCI16', 'PTCI17', 
@@ -102,7 +102,39 @@ def calcular_estatisticas_clusters_ptci(data):
     return estatisticas
 
 
-def calcular_distribuicao_por_sexo(data):
-    distribuicao = data['SEXO'].value_counts(normalize=True) * 100
-    return distribuicao
+def calcular_medidas_tendencia_central(data, coluna):
+    """
+    Calcula as medidas de tendência central para uma coluna específica.
+    """
+    media = data[coluna].mean()
+    mediana = data[coluna].median()
+    moda = data[coluna].mode()[0]
+    return {'Média': media, 'Mediana': mediana, 'Moda': moda}
 
+def calcular_medidas_dispersao(data, coluna):
+    """
+    Calcula as medidas de dispersão para uma coluna específica.
+    """
+    desvio_padrao = data[coluna].std()
+    variancia = data[coluna].var()
+    amplitude = data[coluna].max() - data[coluna].min()
+    return {'Desvio Padrão': desvio_padrao, 'Variância': variancia, 'Amplitude': amplitude}
+
+def examinar_distribuicao(data, coluna):
+    """
+    Realiza o teste de Shapiro-Wilk para normalidade e cria um gráfico de probabilidade.
+    """
+    shapiro_test = shapiro(data[coluna])
+    plt.figure()
+    probplot(data[coluna], dist="norm", plot=plt)
+    plt.title(f'Gráfico de Probabilidade para {coluna}')
+    plt.show()
+    return {'Shapiro-Wilk Test': shapiro_test}
+
+# Função para calcular a frequência de variáveis categóricas
+def calcular_frequencia_categoricas(data, coluna):
+    """
+    Calcula a frequência de valores em uma coluna categórica.
+    """
+    frequencia = data[coluna].value_counts(normalize=True) * 100
+    return frequencia

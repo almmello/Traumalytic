@@ -1,4 +1,5 @@
 import streamlit as st
+import pandas as pd
 from data_loader import DataLoader
 from .calculo_analise_descritiva import (
     calcular_clusters_ptci, 
@@ -8,7 +9,9 @@ from .calculo_analise_descritiva import (
     calcular_escores_ptci,
     calcular_estatisticas_clusters_pcl5,
     calcular_estatisticas_clusters_ptci,
-    calcular_distribuicao_por_sexo
+    calcular_medidas_tendencia_central,
+    calcular_medidas_dispersao,
+    calcular_frequencia_categoricas,
 )
 
 # Função para carregar os dados uma única vez
@@ -52,7 +55,29 @@ def processar_estatisticas_clusters_ptci():
     estatisticas_clusters_ptci = calcular_estatisticas_clusters_ptci(st.session_state['data'])
     st.write('Estatísticas dos Clusters PTCI:', estatisticas_clusters_ptci)
 
-def processar_calculo_distribuicao_por_sexo():
+def formatar_resultados(resultados):
+    return pd.DataFrame(resultados, index=[0]).T.rename(columns={0: 'Valor'})
+
+def processar_medidas_tendencia_central():
     carregar_dados()
-    distribuicao_sexo = calcular_distribuicao_por_sexo(st.session_state['data'])
-    st.write('Distribuição Porcentual por Sexo:', distribuicao_sexo)
+    colunas_numericas = st.session_state['data'].select_dtypes(include='number').columns
+    for coluna in colunas_numericas:
+        resultados = calcular_medidas_tendencia_central(st.session_state['data'], coluna)
+        st.subheader(f"Medidas de Tendência Central - {coluna}")
+        st.table(formatar_resultados(resultados))
+
+def processar_medidas_dispersao():
+    carregar_dados()
+    colunas_numericas = st.session_state['data'].select_dtypes(include='number').columns
+    for coluna in colunas_numericas:
+        resultados = calcular_medidas_dispersao(st.session_state['data'], coluna)
+        st.subheader(f"Medidas de Dispersão - {coluna}")
+        st.table(formatar_resultados(resultados))
+
+def processar_frequencia_categoricas():
+    carregar_dados()
+    colunas_categoricas = st.session_state['data'].select_dtypes(include='object').columns
+    for coluna in colunas_categoricas:
+        resultados = calcular_frequencia_categoricas(st.session_state['data'], coluna)
+        st.subheader(f"Frequência de Variáveis Categóricas - {coluna}")
+        st.table(resultados)

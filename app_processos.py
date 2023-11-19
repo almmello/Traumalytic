@@ -7,7 +7,7 @@ def mostrar_dados_analise():
     st.title("Dados da Análise")
 
     explicar_filtro_idade()
-    min_age, max_age = st.slider("Selecione a faixa etária:", 0, 100, (18, 60), 1)
+    min_age, max_age = st.slider("Selecione a faixa etária:", 0, 100, (18, 65), 1)
 
     # Novos combo boxes para seleção de filtros
     explicar_filtro_pcti()

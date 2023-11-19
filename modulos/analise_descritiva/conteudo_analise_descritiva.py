@@ -42,8 +42,40 @@ def explicar_estatisticas_clusters_ptci():
     Este botão inicia o processamento e exibição das estatísticas descritivas para cada cluster do PTCI, ajudando a entender as variações nos padrões de resposta.
     """)
 
-def explicar_calculo_distribuicao_por_sexo():
+def explicar_medidas_tendencia_central():
     st.markdown("""
-    ### Distribuição por Sexo
-    Esta funcionalidade calcula e exibe a distribuição dos dados por sexo, fornecendo insights valiosos sobre as diferenças de gênero nas respostas aos questionários.
+    ## Medidas de Tendência Central
+    As medidas de tendência central ajudam a entender os valores típicos ou centrais em um conjunto de dados. 
+    Incluem:
+    - **Média**: O valor médio dos dados.
+    - **Mediana**: O valor central dos dados.
+    - **Moda**: O valor mais frequente nos dados.
     """)
+
+def explicar_medidas_dispersao():
+    st.markdown("""
+    ## Medidas de Dispersão
+    As medidas de dispersão fornecem uma ideia sobre a variação ou dispersão dos dados em torno da média. 
+    Incluem:
+    - **Desvio Padrão**: Indica quanto os dados variam em relação à média.
+    - **Variância**: Mede a dispersão quadrática dos dados.
+    - **Amplitude**: Diferença entre o maior e o menor valor.
+    """)
+
+def explicar_exame_distribuicao():
+    st.markdown("""
+    ## Exame das Propriedades da Distribuição
+    O exame das propriedades da distribuição envolve verificar a normalidade dos dados. 
+    Utilizamos:
+    - **Teste de Shapiro-Wilk**: Testa a hipótese de que os dados são normalmente distribuídos.
+    - **Gráficos de Probabilidade (Q-Q Plots)**: Visualiza se a distribuição dos dados segue uma distribuição teórica, como a normal.
+    """)
+
+def explicar_frequencia_categoricas():
+    st.markdown("""
+    ## Frequência de Variáveis Categóricas
+    A análise da frequência de variáveis categóricas ajuda a entender a distribuição de categorias dentro de um conjunto de dados. 
+    Mostra a porcentagem de cada categoria em relação ao total.
+    """)
+
+
