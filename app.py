@@ -1,36 +1,15 @@
 import streamlit as st
 import pandas as pd
 from auth import mostrar_tela_login
-from data_loader import DataLoader
+
 
 # Importações dos módulos
 from modulos.analise_descritiva.interface_analise_descritiva import mostrar_analise_descritiva
 from modulos.analise_normalidade.interface_analise_normalidade import mostrar_analise_normalidade
 from modulos.analise_correlacao.interface_analise_correlacao import mostrar_analise_correlacao
 from modulos.teste_t_student.interface_teste_t_student import mostrar_teste_t_student
-
-
-def mostrar_dados_analise():
-    st.title("Dados da Análise")
-    min_age, max_age = st.slider("Selecione a faixa etária:", 0, 100, (18, 60), 1)
-
-    # Novos combo boxes para seleção de filtros
-    remover_nulos_pcti = st.checkbox("Remover linhas com dados nulos no questionário PCTI")
-    remover_nulos_pcl5 = st.checkbox("Remover linhas com resultados nulos no PCL-5")
-
-    if st.button('Aplicar Filtro'):
-        st.session_state['min_age'] = min_age
-        st.session_state['max_age'] = max_age
-        st.session_state['remover_nulos_pcti'] = remover_nulos_pcti
-        st.session_state['remover_nulos_pcl5'] = remover_nulos_pcl5
-        data_loader = DataLoader()
-        st.session_state['data'] = data_loader.carregar_dados()
-        st.session_state['filtro_aplicado'] = True
-        st.success("Filtros aplicados com sucesso.")
-    
-    if st.session_state.get('filtro_aplicado', False):
-        st.session_state['filtro_aplicado'] = False
-
+from app_processos import mostrar_dados_analise
+from app_conteudo import mostrar_conteudo
 
 
 def main():
@@ -65,7 +44,7 @@ def main():
 
         # Exibição de Conteúdo Baseado na Página Atual
         if st.session_state['pagina_atual'] == 'home':
-            st.title("Bem-vindo à Aplicação")
+            mostrar_conteudo()
         elif st.session_state['pagina_atual'] == 'analise_descritiva':
             mostrar_analise_descritiva()
         elif st.session_state['pagina_atual'] == 'analise_normalidade':

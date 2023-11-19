@@ -4,14 +4,19 @@ from .processo_teste_t_student import (
     processar_teste_t_student_sexo_clusters_ptci
 )
 
+from .conteudo_teste_t_student import (
+    explicar_teste_t_student_sexo_ptci_total,
+    explicar_teste_t_student_sexo_clusters_ptci
+)
+
 def mostrar_teste_t_student():
     st.title("Teste t de Student")
 
-    # Botão para realizar o teste t de Student comparando Sexo e Escore Total do PTCI
+    explicar_teste_t_student_sexo_ptci_total()
     if st.button('Teste t de Student - Sexo vs Escore Total do PTCI'):
         processar_teste_t_student_sexo_ptci_total()
 
-    # Botão para realizar o teste t de Student para cada cluster do PTCI
+    explicar_teste_t_student_sexo_clusters_ptci()
     if st.button('Teste t de Student - Sexo vs Clusters do PTCI'):
         processar_teste_t_student_sexo_clusters_ptci()
 
