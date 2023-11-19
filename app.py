@@ -1,5 +1,7 @@
 import streamlit as st
+import pandas as pd
 from auth import mostrar_tela_login
+from data_loader import DataLoader
 
 # Importações dos módulos
 from modulos.analise_descritiva.interface_analise_descritiva import mostrar_analise_descritiva
@@ -8,12 +10,31 @@ from modulos.analise_correlacao.interface_analise_correlacao import mostrar_anal
 from modulos.teste_t_student.interface_teste_t_student import mostrar_teste_t_student
 
 
+def mostrar_dados_analise():
+    st.title("Dados da Análise")
+    min_age, max_age = st.slider("Selecione a faixa etária:", 0, 100, (18, 60), 1)
+    
+    if st.button('Aplicar Filtro'):
+        st.session_state['min_age'] = min_age
+        st.session_state['max_age'] = max_age
+        data_loader = DataLoader()
+        st.session_state['data'] = data_loader.carregar_dados()
+        st.session_state['filtro_aplicado'] = True
+        st.success("Filtro aplicado com sucesso: Idade mínima = {}, Idade máxima = {}".format(min_age, max_age))
+
+    if st.session_state.get('filtro_aplicado', False):
+        st.session_state['filtro_aplicado'] = False  # Reseta a flag após exibir a mensagem
+
+
 def main():
     # Inicialização das variáveis de sessão
     if 'logged_in' not in st.session_state:
         st.session_state['logged_in'] = False
     if 'pagina_atual' not in st.session_state:
         st.session_state['pagina_atual'] = 'home'
+    if 'data' not in st.session_state:
+        st.session_state['data'] = pd.DataFrame(columns=['IDADE', 'SEXO', 'INSTRUCAO'])  # Colunas como exemplo
+
 
     # Mostrar tela de login
     if not st.session_state['logged_in']:
@@ -24,6 +45,8 @@ def main():
     # Sidebar e Navegação
     if st.session_state['logged_in']:
         st.sidebar.title("Menu")
+        if st.sidebar.button("Dados da Análise"):
+            st.session_state['pagina_atual'] = 'dados_analise'
         if st.sidebar.button("Análise Descritiva"):
             st.session_state['pagina_atual'] = 'analise_descritiva'
         if st.sidebar.button("Análise de Normalidade"):
@@ -44,6 +67,8 @@ def main():
             mostrar_analise_correlacao()
         elif st.session_state['pagina_atual'] == 'teste_t_student':
             mostrar_teste_t_student()
+        elif st.session_state['pagina_atual'] == 'dados_analise':
+            mostrar_dados_analise()
 
 if __name__ == "__main__":
     main()
