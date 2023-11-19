@@ -13,17 +13,24 @@ from modulos.teste_t_student.interface_teste_t_student import mostrar_teste_t_st
 def mostrar_dados_analise():
     st.title("Dados da Análise")
     min_age, max_age = st.slider("Selecione a faixa etária:", 0, 100, (18, 60), 1)
-    
+
+    # Novos combo boxes para seleção de filtros
+    remover_nulos_pcti = st.checkbox("Remover linhas com dados nulos no questionário PCTI")
+    remover_nulos_pcl5 = st.checkbox("Remover linhas com resultados nulos no PCL-5")
+
     if st.button('Aplicar Filtro'):
         st.session_state['min_age'] = min_age
         st.session_state['max_age'] = max_age
+        st.session_state['remover_nulos_pcti'] = remover_nulos_pcti
+        st.session_state['remover_nulos_pcl5'] = remover_nulos_pcl5
         data_loader = DataLoader()
         st.session_state['data'] = data_loader.carregar_dados()
         st.session_state['filtro_aplicado'] = True
-        st.success("Filtro aplicado com sucesso: Idade mínima = {}, Idade máxima = {}".format(min_age, max_age))
-
+        st.success("Filtros aplicados com sucesso.")
+    
     if st.session_state.get('filtro_aplicado', False):
-        st.session_state['filtro_aplicado'] = False  # Reseta a flag após exibir a mensagem
+        st.session_state['filtro_aplicado'] = False
+
 
 
 def main():
