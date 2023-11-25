@@ -7,14 +7,15 @@ def mostrar_dados_analise():
     st.title("Dados da Análise")
 
     explicar_filtro_idade()
-    min_age, max_age = st.slider("Selecione a faixa etária:", 0, 100, (18, 65), 1)
+    min_age, max_age = st.slider("Selecione a faixa etária:", 0, 100, (st.session_state['min_age'], st.session_state['max_age']), 1)
 
     # Novos combo boxes para seleção de filtros
     explicar_filtro_pcti()
-    remover_nulos_pcti = st.checkbox("Remover linhas com dados nulos no questionário PCTI")
+    remover_nulos_pcti = st.checkbox("Remover linhas com dados nulos no questionário PCTI", st.session_state['remover_nulos_pcti'])
+
 
     explicar_filtro_pcl5()
-    remover_nulos_pcl5 = st.checkbox("Remover linhas com resultados nulos no PCL-5")
+    remover_nulos_pcl5 = st.checkbox("Remover linhas com resultados nulos no PCL-5", st.session_state['remover_nulos_pcl5'])
 
     if st.button('Aplicar Filtro'):
         st.session_state['min_age'] = min_age

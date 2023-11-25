@@ -20,7 +20,14 @@ def main():
         st.session_state['pagina_atual'] = 'home'
     if 'data' not in st.session_state:
         st.session_state['data'] = pd.DataFrame(columns=['IDADE', 'SEXO', 'INSTRUCAO'])  # Colunas como exemplo
-
+    if 'min_age' not in st.session_state:
+        st.session_state['min_age'] = 18  # Valor padrão para idade mínima
+    if 'max_age' not in st.session_state:
+        st.session_state['max_age'] = 60  # Valor padrão para idade máxima
+    if 'remover_nulos_pcti' not in st.session_state:
+        st.session_state['remover_nulos_pcti'] = True  # Valor padrão para o filtro PTCI
+    if 'remover_nulos_pcl5' not in st.session_state:
+        st.session_state['remover_nulos_pcl5'] = True  # Valor padrão para o filtro PCL-5
 
     # Mostrar tela de login
     if not st.session_state['logged_in']:
