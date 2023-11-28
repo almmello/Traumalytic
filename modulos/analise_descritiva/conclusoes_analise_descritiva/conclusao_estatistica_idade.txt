@@ -6,6 +6,4 @@ Com base nas estatísticas fornecidas sobre a idade, podemos fazer algumas concl
 
 3. A idade mínima é de 18 anos. Isso implica que as pessoas analisadas têm pelo menos 18 anos de idade.
 
-4. A idade máxima é de 46 anos. Isso significa que as pessoas analisadas têm no máximo 46 anos de idade.
-
 Com base nessas estatísticas, podemos concluir que o grupo de pessoas analisadas possui uma faixa etária relativamente ampla, variando de 18 a 46 anos, com uma média de aproximadamente 32 anos e meio. O desvio padrão indica que existe alguma variação na idade, sugerindo que o grupo pode ser diversificado em termos de faixa etária. Essas informações podem ser úteis para entender o perfil demográfico do grupo em análise e podem ser usadas para tomar decisões informadas relacionadas a políticas, produtos ou serviços voltados para esse grupo etário específico.

@@ -15,7 +15,10 @@ from .calculo_analise_descritiva import (
     calcular_frequencia_categoricas,
 )
 
-from .conclusao_analise_descritiva import gerar_conclusao_estatisticas_idade
+from .conclusao_analise_descritiva import (
+    gerar_conclusao_estatisticas_idade,
+    processar_comentario_e_atualizar_conclusao
+)
 
 # Função para carregar os dados uma única vez
 def carregar_dados():

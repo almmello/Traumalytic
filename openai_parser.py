@@ -22,5 +22,14 @@ class OpenAIInterface:
         return completion.choices[0].message
 
 
-
+    def process_comment_and_update_conclusion(self, comment, original_conclusion):
+        response = self.client.chat.completions.create(
+            model="gpt-3.5-turbo",  # ou "gpt-4-1106-preview" conforme a sua necessidade
+            messages=[
+                {"role": "system", "content": "You are a helpful assistant."},
+                {"role": "user", "content": f"Comentário: {comment}\n\nConclusão Original: {original_conclusion}"},
+                {"role": "user", "content": "Com base neste comentário, como poderia ser uma versão atualizada da conclusão?"}
+            ]
+        )
+        return response.choices[0].message
 

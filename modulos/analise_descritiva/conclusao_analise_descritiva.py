@@ -29,19 +29,19 @@ def processar_comentario_e_atualizar_conclusao(comentario):
     dir_path = 'modulos/analise_descritiva/conclusoes_analise_descritiva'
     conclusao_path = os.path.join(dir_path, 'conclusao_estatistica_idade.txt')
 
-    # Verificar se o arquivo existe e ler a conclusão atual
+    # Verifying if the conclusion file exists...
     if os.path.exists(conclusao_path):
         with open(conclusao_path, 'r') as file:
             conclusao_atual = file.read()
-
-        # Processar o comentário e gerar a nova conclusão
         openai_interface = OpenAIInterface()
-        nova_conclusao = openai_interface.process_comment_and_update_conclusion(comentario, conclusao_atual)
 
-        # Atualizar o arquivo com a nova conclusão
+        response = openai_interface.process_comment_and_update_conclusion(comentario, conclusao_atual)
+        nova_conclusao = response.content
+
         with open(conclusao_path, 'w') as file:
             file.write(nova_conclusao)
         
         return nova_conclusao
     else:
+
         return None
