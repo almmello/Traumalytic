@@ -28,6 +28,12 @@ def explicar_filtro_idade():
     Selecione a faixa etária dos participantes para focar em um grupo etário específico. Isso permite analisar os dados com base na idade dos respondentes.
     """)
 
+def explicar_filtro_idade_nulos():
+    st.markdown("""
+    ### Filtro de Idades Nulas
+    Ao marcar esta opção, você remove da análise os registros com idades incompletas ou ausentes nos questionários PTCI e PCL-5.
+    """)
+
 def explicar_filtro_pcti():
     st.markdown("""
     ### Filtro de Dados Nulos no PTCI

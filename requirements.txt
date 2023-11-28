@@ -6,3 +6,6 @@ scipy
 matplotlib
 seaborn
 cryptography
+openai
+tabulate
+st-pages

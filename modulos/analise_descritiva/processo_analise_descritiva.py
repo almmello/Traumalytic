@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import os
 from data_loader import DataLoader
 from .calculo_analise_descritiva import (
     calcular_clusters_ptci, 
@@ -13,6 +14,8 @@ from .calculo_analise_descritiva import (
     calcular_medidas_dispersao,
     calcular_frequencia_categoricas,
 )
+
+from .conclusao_analise_descritiva import gerar_conclusao_estatisticas_idade
 
 # Função para carregar os dados uma única vez
 def carregar_dados():
@@ -34,6 +37,32 @@ def processar_estatisticas_idade():
     carregar_dados()
     estatisticas_idade = calcular_estatisticas(st.session_state['data'], 'IDADE')
     st.write('Estatísticas de Idade:', estatisticas_idade)
+
+def processar_estatisticas_idade():
+    carregar_dados()
+    estatisticas_idade = calcular_estatisticas(st.session_state['data'], 'IDADE')
+    st.write('Estatísticas de Idade:', estatisticas_idade)
+
+    conclusao = gerar_conclusao_estatisticas_idade(estatisticas_idade)
+    st.subheader('Conclusão da Análise Descritiva:')
+    st.markdown(conclusao)
+
+    # Adicionar caixa de texto para comentários
+    st.write("Faça comentários sobre a conclusão de forma que possa ser atualizada:")
+    comentario = st.text_area("Comentários")
+
+    # Botão para enviar comentários e atualizar a conclusão
+    if st.button('Enviar Comentário'):
+        nova_conclusao = processar_comentario_e_atualizar_conclusao(comentario)
+        if nova_conclusao:
+            st.subheader('Conclusão Atualizada:')
+            st.markdown(nova_conclusao)
+
+    # Botão para apagar o arquivo de conclusão
+    if st.button('Apagar Conclusão'):
+        os.remove('modulos/analise_descritiva/conclusoes_analise_descritiva/conclusao_estatistica_idade.txt')
+        st.write('Conclusão apagada com sucesso.')
+
 
 def processar_estatisticas_escore_total_pcl5():
     carregar_dados()

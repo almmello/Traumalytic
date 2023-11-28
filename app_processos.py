@@ -1,6 +1,6 @@
 import streamlit as st
 from data_loader import DataLoader
-from app_conteudo import explicar_filtro_idade, explicar_filtro_pcti, explicar_filtro_pcl5
+from app_conteudo import explicar_filtro_idade, explicar_filtro_idade_nulos, explicar_filtro_pcti, explicar_filtro_pcl5
 
 
 def mostrar_dados_analise():
@@ -8,6 +8,9 @@ def mostrar_dados_analise():
 
     explicar_filtro_idade()
     min_age, max_age = st.slider("Selecione a faixa etária:", 0, 100, (st.session_state['min_age'], st.session_state['max_age']), 1)
+
+    explicar_filtro_idade_nulos()
+    remover_nulos_idade = st.checkbox("Remover linhas com idades nulas", st.session_state['remover_nulos_idade'])
 
     # Novos combo boxes para seleção de filtros
     explicar_filtro_pcti()
@@ -20,6 +23,7 @@ def mostrar_dados_analise():
     if st.button('Aplicar Filtro'):
         st.session_state['min_age'] = min_age
         st.session_state['max_age'] = max_age
+        st.session_state['remover_nulos_idade'] = remover_nulos_idade
         st.session_state['remover_nulos_pcti'] = remover_nulos_pcti
         st.session_state['remover_nulos_pcl5'] = remover_nulos_pcl5
         data_loader = DataLoader()
@@ -29,3 +33,7 @@ def mostrar_dados_analise():
     
     if st.session_state.get('filtro_aplicado', False):
         st.session_state['filtro_aplicado'] = False
+
+
+if __name__ == "__main__":
+    mostrar_dados_analise()
