@@ -1,11 +1,11 @@
 import streamlit as st
 
 # Importações absolutas baseadas na estrutura do projeto
-from modulos.analise_descritiva.processo_analise_descritiva import (
+from modulos.descritiva_estatisticas_idade.processo_descritiva_estatisticas_idade import (
     processar_estatisticas_idade,
 )
 
-from modulos.analise_descritiva.conteudo_analise_descritiva import (
+from modulos.descritiva_estatisticas_idade.conteudo_descritiva_estatisticas_idade import (
     explicar_estatisticas_idade,
 )
 

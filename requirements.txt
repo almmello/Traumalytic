@@ -9,3 +9,4 @@ cryptography
 openai
 tabulate
 st-pages
+supabase

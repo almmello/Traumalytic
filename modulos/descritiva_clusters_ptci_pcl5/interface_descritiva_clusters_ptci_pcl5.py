@@ -1,12 +1,12 @@
 import streamlit as st
 
 # Importações absolutas baseadas na estrutura do projeto
-from modulos.analise_descritiva.processo_analise_descritiva import (
+from modulos.descritiva_clusters_ptci_pcl5.processo_descritiva_clusters_ptci_pcl5 import (
     processar_exibir_clusters_ptci,
     processar_exibir_clusters_pcl5,
 )
 
-from modulos.analise_descritiva.conteudo_analise_descritiva import (
+from modulos.descritiva_clusters_ptci_pcl5.conteudo_descritiva_clusters_ptci_pcl5 import (
     explicar_clusters_ptci,
     explicar_clusters_pcl5,
 )

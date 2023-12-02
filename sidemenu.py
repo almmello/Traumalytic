@@ -4,8 +4,8 @@ import streamlit as st
 # Importações dos módulos das páginas
 from app_interface import mostrar_conteudo as mostrar_home
 from app_processos import mostrar_dados_analise as mostrar_configuracao
-from modulos.analise_descritiva.interface_clusters import mostrar_clusters
-from modulos.analise_descritiva.interface_estatisticas_idade import mostrar_estatisticas_idade
+from modulos.descritiva_clusters_ptci_pcl5.interface_descritiva_clusters_ptci_pcl5 import mostrar_clusters
+from modulos.descritiva_estatisticas_idade.interface_descritiva_estatisticas_idade import mostrar_estatisticas_idade
 
 def create_sidebar():
     st.sidebar.title("Traumalytics")
