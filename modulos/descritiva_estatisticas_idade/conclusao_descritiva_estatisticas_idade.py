@@ -25,21 +25,35 @@ def gerar_conclusao_estatisticas_idade(estatisticas_idade, analysis_id):
 
 
 
-
 def processar_comentario_e_atualizar_conclusao(comentario, analysis_id):
     APP_USER = os.getenv("ENV_USER")
     supabase_manager = SupabaseManager()
+    openai_interface = OpenAIInterface()
 
+    # Retrieve all existing conclusions for the analysis
     existing_conclusions = supabase_manager.get_conclusions()
-    conclusao_atual = next((conclusion for conclusion in existing_conclusions if conclusion['analysis_id'] == analysis_id), None)
 
-    if conclusao_atual:
-        openai_interface = OpenAIInterface()
-        response = openai_interface.process_comment_and_update_conclusion(comentario, conclusao_atual['conclusion'])
-        updated_conclusion = response.content
+    # Build the chat history for OpenAI to process
+    chat_history = [
+        {"role": "assistant" if conclusion['type'] == 'response' else "user", "content": conclusion['conclusion']}
+        for conclusion in existing_conclusions
+        if conclusion['analysis_id'] == analysis_id
+    ]
 
-        supabase_manager.update_conclusion(conclusao_atual['id'], {"conclusion": updated_conclusion, "type": "comment", "status": "active"})
-        return updated_conclusion
-    else:
-        return None
+    # Add the new user comment to the chat history
+    chat_history.append({"role": "user", "content": comentario})
+
+    # Request OpenAI to process the chat and provide an updated conclusion
+    response = openai_interface.process_comment_and_update_conclusion(comentario, ''.join([message['content'] for message in chat_history]))
+    updated_conclusion = response.content
+
+    # Insert the new comment and updated conclusion into the database
+    supabase_manager.insert_conclusion(APP_USER, analysis_id, 'comment', comentario, 'active')
+    supabase_manager.insert_conclusion(APP_USER, analysis_id, 'response', updated_conclusion, 'active')
+
+    return updated_conclusion
+
+
+
+
 

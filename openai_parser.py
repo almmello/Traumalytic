@@ -13,11 +13,12 @@ class OpenAIInterface:
 
     def generate_text_conclusion_with_template(self, content, instructions):
         completion = self.client.chat.completions.create(
-            model="gpt-3.5-turbo", #gpt-4-1106-preview",
+            model="gpt-3.5-turbo", #gpt-3.5-turbo-0301",    #gpt-4-1106-preview",
             messages=[
                 {"role": "system", "content": "You are a helpful assistant."},
                 {"role": "user", "content": f"{instructions}\n\n{content}"}
-            ]
+            ],
+            # max_tokens=20,
         )
         return completion.choices[0].message
 
@@ -29,7 +30,8 @@ class OpenAIInterface:
                 {"role": "system", "content": "You are a helpful assistant."},
                 {"role": "user", "content": f"Comentário: {comment}\n\nConclusão Original: {original_conclusion}"},
                 {"role": "user", "content": "Com base neste comentário, como poderia ser uma versão atualizada da conclusão?"}
-            ]
+            ],
+            # max_tokens=20,
         )
         return response.choices[0].message
 
