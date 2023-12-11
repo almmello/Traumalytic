@@ -6,9 +6,8 @@ from modulos.descritiva_estatisticas_idade.calculo_descritiva_estatisticas_idade
     calcular_estatisticas,
 )
 
-from modulos.descritiva_estatisticas_idade.conclusao_descritiva_estatisticas_idade import (
-    gerar_conclusao_estatisticas_idade,
-    processar_comentario_e_atualizar_conclusao
+from openai_interface import (
+    carregar_conclusoes,
 )
 
 from supabase_manager import SupabaseManager
@@ -21,39 +20,20 @@ def carregar_dados():
 def processar_estatisticas_idade():
     APP_USER = os.getenv("ENV_USER")
     analysis_id = 'descritiva_estatisticas_idade'
+    nome_analise = 'Análise Descritiva'
+    instrucoes = "Analisando os resultados da análise de estatísticas de idade, forneça uma conclusão detalhada e útil sobre as implicações desses dados."
 
-    carregar_dados()
-    estatisticas_idade = calcular_estatisticas(st.session_state['data'], 'IDADE')
-    st.write('Estatísticas de Idade:', estatisticas_idade)
-
-    supabase_manager = SupabaseManager()
-    existing_conclusions = supabase_manager.get_conclusions()
-
-    # Filter and sort the conclusions and comments by creation time
-    chat_history = sorted(
-        [c for c in existing_conclusions if c['analysis_id'] == analysis_id and c['user_id'] == APP_USER],
-        key=lambda x: x['created_at']
-    )
-
-    # Display the chat history
-    for message in chat_history:
-        if message['type'] == 'response':
-            st.subheader('Conclusão da Análise Descritiva:')
-        elif message['type'] == 'comment':
-            st.subheader('Comentário:')
-        st.markdown(message['conclusion'])
-
-    # Initialize counter in session state if not exists
+    # Inicializar reset_counter no estado da sessão, se não existir
     if 'reset_counter' not in st.session_state:
         st.session_state['reset_counter'] = 0
 
-    # Use a unique key for the text area based on the counter
-    comentario = st.text_area("Faça comentários sobre a conclusão de forma que possa ser atualizada:", key=f"comment_{st.session_state['reset_counter']}")
+    carregar_dados()
 
-    if st.button('Enviar Comentário'):
-        processar_comentario_e_atualizar_conclusao(comentario, analysis_id)
-        st.session_state['reset_counter'] += 1
-        st.rerun()
+    resultados = calcular_estatisticas(st.session_state['data'], 'IDADE')
+    st.write('Estatísticas de Idade:', resultados)
+
+    carregar_conclusoes(analysis_id, nome_analise, resultados, instrucoes)
+
 
 
 

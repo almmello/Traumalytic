@@ -7,31 +7,39 @@ load_dotenv()
 class OpenAIInterface:
     def __init__(self):
         self.api_key = os.getenv('OPENAI_API_KEY')
+        self.model = "gpt-3.5-turbo"  # ou "gpt-4-1106-preview" conforme a necessidade
+        self.max_tokens = 150  # Valor padrão, ajuste conforme necessário
+        self.system_message_content = "Você é um assistente analítico especializado em dados de trauma e TEPT. Forneça insights e gere conclusões que possam auxiliar na compreensão do impacto do trauma nos indivíduos."
         openai.api_key = self.api_key
         self.client = openai.OpenAI()  # Criando um cliente da biblioteca openai
 
+    def criar_conclusao(self, instrucoes, resultados, comentario=None, historico_conclusoes=None):
+        # Construção da mensagem inicial com os resultados da análise
+        instrucao_completa = f"{instrucoes}\n\nResultados da análise:\n{resultados}"
 
-    def generate_text_conclusion_with_template(self, content, instructions):
-        completion = self.client.chat.completions.create(
-            model="gpt-3.5-turbo", #gpt-3.5-turbo-0301",    #gpt-4-1106-preview",
-            messages=[
-                {"role": "system", "content": "You are a helpful assistant."},
-                {"role": "user", "content": f"{instructions}\n\n{content}"}
-            ],
-            # max_tokens=20,
-        )
-        return completion.choices[0].message
+        # Construção das mensagens
+        messages = [
+            {"role": "system", "content": self.system_message_content},
+            {"role": "user", "content": instrucao_completa}
+        ]
 
+        # Adicionar cada entrada do histórico de conclusões ao histórico de mensagens
+        if historico_conclusoes:
+            for conclusao in historico_conclusoes:
+                role = "system" if conclusao['type'] == 'resposta' else "user"
+                messages.append({"role": role, "content": conclusao['conclusion']})
 
-    def process_comment_and_update_conclusion(self, comment, original_conclusion):
+        # Se houver um novo comentário, adicionar ao final da lista de mensagens
+        if comentario:
+            messages.append({"role": "user", "content": comentario})
+
+        # Chamada à API OpenAI para processar as mensagens e gerar uma conclusão
         response = self.client.chat.completions.create(
-            model="gpt-3.5-turbo",  # ou "gpt-4-1106-preview" conforme a sua necessidade
-            messages=[
-                {"role": "system", "content": "You are a helpful assistant."},
-                {"role": "user", "content": f"Comentário: {comment}\n\nConclusão Original: {original_conclusion}"},
-                {"role": "user", "content": "Com base neste comentário, como poderia ser uma versão atualizada da conclusão?"}
-            ],
-            # max_tokens=20,
+            model=self.model,
+            messages=messages,
+            max_tokens=self.max_tokens,
         )
+
+        # Retornar a conclusão gerada pelo modelo
         return response.choices[0].message
 

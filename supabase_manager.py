@@ -9,9 +9,10 @@ class SupabaseManager:
         key = os.getenv('SUPABASE_KEY')
         self.supabase: Client = create_client(url, key)
 
-    def insert_conclusion(self, user_id, analysis_id, conclusion_type, conclusion, status):
+    def inserir_conclusao(self, analysis_id, conclusion_type, conclusion, status):
+        APP_USER = os.getenv("ENV_USER")
         data = {
-            "user_id": user_id,
+            "user_id": APP_USER,
             "analysis_id": analysis_id,
             "type": conclusion_type,
             "conclusion": conclusion,
@@ -19,15 +20,13 @@ class SupabaseManager:
         }
         return self.supabase.table("conclusions").insert(data).execute()
 
-    def get_conclusions(self):
-        response = self.supabase.table("conclusions").select("*").execute()
+    def recuperar_conclusoes(self, analysis_id):
+        response = self.supabase.table("conclusions").select("*").eq("analysis_id", analysis_id).execute()
         # Assuming the response contains a 'data' attribute with the actual results
         return response.data if response else []
 
-    def update_conclusion(self, id, updated_data):
+    def atualizar_conclusao(self, id, updated_data):
         return self.supabase.table("conclusions").update(updated_data).eq("id", id).execute()
 
-    def delete_conclusion(self, id):
+    def apagar_conclusao(self, id):
         return self.supabase.table("conclusions").delete().eq("id", id).execute()
-
-    # Additional methods for data insertion, querying, etc., can be added here
