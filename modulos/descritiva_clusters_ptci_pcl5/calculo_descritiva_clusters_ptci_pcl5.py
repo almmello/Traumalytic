@@ -5,7 +5,7 @@ from scipy.stats import probplot
 import numpy as np
 
 
-## Funções calcular_clusters_ptci e calcular_clusters_pcl5 aqui (definidas anteriormente)
+## Funções calcular_clusters_ptci e calcular_clusters_pcl5
 def calcular_clusters_ptci(data):
     # Fórmulas para os clusters do PTCI
     clusters_ptci = {
@@ -14,13 +14,16 @@ def calcular_clusters_ptci(data):
         'Cluster_B': ['PTCI07', 'PTCI08', 'PTCI10', 'PTCI11', 'PTCI18', 'PTCI23', 'PTCI27'],
         'Cluster_C': ['PTCI01', 'PTCI15', 'PTCI19', 'PTCI22', 'PTCI31']
     }
-    
+
+    # Calcula a soma e média para cada cluster
     for cluster, questions in clusters_ptci.items():
         data[cluster] = data[questions].sum(axis=1)
         data[cluster + '_media'] = data[cluster] / len(questions)
 
-    return data
+    # Calcula o escore total do PTCI
+    data['PTCI_Total'] = data[['Cluster_A_media', 'Cluster_B_media', 'Cluster_C_media']].sum(axis=1)
 
+    return data
 
 def calcular_clusters_pcl5(data):
     # Fórmulas para os clusters do PCL-5
@@ -28,7 +31,8 @@ def calcular_clusters_pcl5(data):
         'Cluster_B': ['PCL01', 'PCL02', 'PCL03', 'PCL04', 'PCL05'],
         'Cluster_C': ['PCL06', 'PCL07'],
         'Cluster_D': ['PCL08', 'PCL09', 'PCL10', 'PCL11', 'PCL12', 'PCL13', 'PCL14'],
-        'Cluster_E': ['PCL15', 'PCL16', 'PCL17', 'PCL18', 'PCL19', 'PCL20']
+        'Cluster_E': ['PCL15', 'PCL16', 'PCL17', 'PCL18', 'PCL19', 'PCL20'],
+        'PCL5_total': ['PCL01', 'PCL02', 'PCL03', 'PCL04', 'PCL05', 'PCL06', 'PCL07', 'PCL08', 'PCL09', 'PCL10', 'PCL11', 'PCL12', 'PCL13', 'PCL14', 'PCL15', 'PCL16', 'PCL17', 'PCL18', 'PCL19', 'PCL20']
     }
 
     for cluster, questions in clusters_pcl5.items():
