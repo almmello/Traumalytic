@@ -7,10 +7,11 @@ from app_processos import mostrar_dados_analise as mostrar_configuracao
 from modulos.visualizacao_itens_clusters_pcl5.interface_visualizacao_itens_clusters_pcl5 import mostrar_visualizacao_itens_clusters_pcl5
 from modulos.visualizacao_itens_clusters_ptci.interface_visualizacao_itens_clusters_ptci import mostrar_visualizacao_itens_clusters_ptci
 from modulos.descritiva_estatisticas_idade.interface_descritiva_estatisticas_idade import mostrar_descritiva_estatisticas_idade
-from modulos.descritiva_estatisticas_itens_pcl5.interface_descritiva_estatisticas_itens_pcl5 import mostrar_descritiva_estatisticas_itens_pcl5
+from modulos.descritiva_estatisticas_itens_ptci.interface_descritiva_estatisticas_itens_ptci import mostrar_descritiva_estatisticas_itens_ptci
 from modulos.descritiva_estatisticas_itens_ptci.interface_descritiva_estatisticas_itens_ptci import mostrar_descritiva_estatisticas_itens_ptci
 from modulos.descritiva_estatisticas_clusters_pcl5.interface_descritiva_estatisticas_clusters_pcl5 import mostrar_descritiva_estatisticas_clusters_pcl5
 from modulos.descritiva_estatisticas_clusters_ptci.interface_descritiva_estatisticas_clusters_ptci import mostrar_descritiva_estatisticas_clusters_ptci
+from modulos.corte_tept_pcl5.interface_corte_tept_pcl5 import mostrar_corte_tept_pcl5
 
 def create_sidebar():
     st.sidebar.title("Traumalytics")
@@ -25,16 +26,18 @@ def create_sidebar():
     if st.sidebar.button("Itens e Clusters do PTCI"):
         st.session_state['pagina_atual'] = 'visualizacao_itens_clusters_ptci'
     st.sidebar.markdown("## Análise Descritiva")
-    if st.sidebar.button("Idade"):
+    if st.sidebar.button("Estatísticas de Idade"):
         st.session_state['pagina_atual'] = 'descritiva_estatisticas_idade'
-    if st.sidebar.button("Itens do PCL5"):
-        st.session_state['pagina_atual'] = 'descritiva_estatisticas_itens_pcl5'
-    if st.sidebar.button("Itens do PTCI"):
+    if st.sidebar.button("Estatísticas dos Itens do PCL5"):
         st.session_state['pagina_atual'] = 'descritiva_estatisticas_itens_ptci'
-    if st.sidebar.button("Clusters e Escore Total do PCL-5"):
+    if st.sidebar.button("Estatísticas dos Itens do PTCI"):
+        st.session_state['pagina_atual'] = 'descritiva_estatisticas_itens_ptci'
+    if st.sidebar.button("Estatísticas dos Clusters PCL-5"):
         st.session_state['pagina_atual'] = 'descritiva_estatisticas_clusters_pcl5'
-    if st.sidebar.button("Clusters e Escore Total do PTCI"):
+    if st.sidebar.button("Estatísticas dos Clusters PTCI"):
         st.session_state['pagina_atual'] = 'descritiva_estatisticas_clusters_ptci'
+    if st.sidebar.button("Análise de Corte TEPT PCL-5"):
+        st.session_state['pagina_atual'] = 'corte_tept_pcl5'
 
 
     # Exibição de Conteúdo Baseado na Página Atual
@@ -48,11 +51,13 @@ def create_sidebar():
         mostrar_visualizacao_itens_clusters_ptci()
     elif st.session_state['pagina_atual'] == 'descritiva_estatisticas_idade':
         mostrar_descritiva_estatisticas_idade()
-    elif st.session_state['pagina_atual'] == 'descritiva_estatisticas_itens_pcl5':
-        mostrar_descritiva_estatisticas_itens_pcl5()
+    elif st.session_state['pagina_atual'] == 'descritiva_estatisticas_itens_ptci':
+        mostrar_descritiva_estatisticas_itens_ptci()
     elif st.session_state['pagina_atual'] == 'descritiva_estatisticas_itens_ptci':
         mostrar_descritiva_estatisticas_itens_ptci()
     elif st.session_state['pagina_atual'] == 'descritiva_estatisticas_clusters_pcl5':
         mostrar_descritiva_estatisticas_clusters_pcl5()
     elif st.session_state['pagina_atual'] == 'descritiva_estatisticas_clusters_ptci':
         mostrar_descritiva_estatisticas_clusters_ptci()
+    elif st.session_state['pagina_atual'] == 'corte_tept_pcl5':
+        mostrar_corte_tept_pcl5()

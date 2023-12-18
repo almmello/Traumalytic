@@ -1,7 +1,12 @@
 import streamlit as st
 from data_loader import DataLoader
-from app_conteudo import explicar_filtro_idade, explicar_filtro_idade_nulos, explicar_filtro_pcti, explicar_filtro_pcl5
-
+from app_conteudo import (
+    explicar_filtro_idade,
+    explicar_filtro_idade_nulos,
+    explicar_filtro_pcti,
+    explicar_filtro_pcl5,
+    explicar_ponto_de_corte_tept,
+)
 
 def mostrar_dados_analise():
     st.title("Dados da Análise")
@@ -20,12 +25,21 @@ def mostrar_dados_analise():
     explicar_filtro_pcl5()
     remover_nulos_pcl5 = st.checkbox("Remover linhas com resultados nulos no PCL-5", st.session_state['remover_nulos_pcl5'])
 
+    # Adicionar um slider para definir o ponto de corte para TEPT
+    explicar_ponto_de_corte_tept()
+    ponto_de_corte_tept = st.slider(
+        "Defina o ponto de corte para o diagnóstico de TEPT:", 
+        0, 80, 
+        st.session_state['ponto_de_corte_tept']
+    )
+
     if st.button('Aplicar Filtro'):
         st.session_state['min_age'] = min_age
         st.session_state['max_age'] = max_age
         st.session_state['remover_nulos_idade'] = remover_nulos_idade
         st.session_state['remover_nulos_pcti'] = remover_nulos_pcti
         st.session_state['remover_nulos_pcl5'] = remover_nulos_pcl5
+        st.session_state['ponto_de_corte_tept'] = ponto_de_corte_tept
         data_loader = DataLoader()
         st.session_state['data'] = data_loader.carregar_dados()
         st.session_state['filtro_aplicado'] = True

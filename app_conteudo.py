@@ -46,3 +46,9 @@ def explicar_filtro_pcl5():
     Similar ao filtro PTCI, esta opção exclui registros com dados incompletos ou ausentes no questionário PCL-5, proporcionando uma análise mais precisa dos sintomas relacionados ao TEPT.
     """)
 
+def explicar_ponto_de_corte_tept():
+    st.markdown("""
+    ### Ponto de Corte para Diagnóstico de TEPT
+    O ponto de corte é o valor limiar usado para determinar a possível presença de TEPT com base no escore total do PCL-5. Um escore acima desse ponto de corte indica que o número de sintomas relatados pode ser suficiente para um diagnóstico de TEPT, enquanto um escore abaixo sugere que os sintomas não atingem o limiar clínico para o diagnóstico.
+    """)
+

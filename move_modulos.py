@@ -19,30 +19,32 @@ def main():
     
     dirModulo = "modulos"
 
-    # Apagar o arquivo sidemenu.py no destino, se existir, e mover o novo
-    sidemenu_destino = os.path.join(destino, "sidemenu.py")
-    if os.path.exists(sidemenu_destino):
-        os.remove(sidemenu_destino)
-
+    # Verificar e mover o arquivo sidemenu.py, se existir
     sidemenu_origem = os.path.join(origem, "sidemenu.py")
+    sidemenu_destino = os.path.join(destino, "sidemenu.py")
     if os.path.exists(sidemenu_origem):
+        if os.path.exists(sidemenu_destino):
+            os.remove(sidemenu_destino)
         shutil.move(sidemenu_origem, sidemenu_destino)
+        print("Arquivo sidemenu.py movido com sucesso.")
+    else:
+        print("Arquivo sidemenu.py não encontrado na origem.")
 
-    # Verificar se alguma pasta em origem já existe em destino
-    for item in os.listdir(origem):
-        item_path = os.path.join(origem, item)
-        destino_path = os.path.join(destino, dirModulo, item)
-        if os.path.isdir(item_path) and os.path.exists(destino_path):
-            print(f"A pasta '{item}' já existe no destino. Processo interrompido.")
-            return
-
-    # Mover todas as pastas restantes de origem para destino
-    for item in os.listdir(origem):
-        item_path = os.path.join(origem, item)
-        if os.path.isdir(item_path):
-            shutil.move(item_path, os.path.join(destino, dirModulo))
-
-    print("Arquivos e pastas movidos com sucesso.")
+    # Verificar se existem pastas na origem
+    if any(os.path.isdir(os.path.join(origem, item)) for item in os.listdir(origem)):
+        # Verificar e mover pastas
+        for item in os.listdir(origem):
+            item_path = os.path.join(origem, item)
+            destino_path = os.path.join(destino, dirModulo, item)
+            if os.path.isdir(item_path):
+                if os.path.exists(destino_path):
+                    print(f"A pasta '{item}' já existe no destino. Não será movida.")
+                else:
+                    shutil.move(item_path, destino_path)
+                    print(f"Pasta '{item}' movida com sucesso.")
+    else:
+        print("Nenhuma pasta encontrada na origem para ser movida.")
 
 if __name__ == "__main__":
     main()
+

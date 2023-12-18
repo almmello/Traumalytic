@@ -17,7 +17,7 @@ def calcular_clusters_pcl5(data):
     return data
 
 def calcular_estatisticas(data, coluna):
-    return data[coluna].agg(['min', 'max', 'mean', 'std', 'count', 'kurtosis','skew', 'quantile'])
+    return data[coluna].agg(['count', 'min', 'max', 'mean', 'std', 'kurtosis','skew', 'quantile'])
 
 def calcular_descritiva_estatisticas_clusters_pcl5(data):
     # Usa a função para calcular os clusters e o escore total do PCL5
