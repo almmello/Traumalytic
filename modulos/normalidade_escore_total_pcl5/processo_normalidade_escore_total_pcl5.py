@@ -4,7 +4,7 @@ import pandas as pd
 import os
 from data_loader import DataLoader
 from fig_management import FigManagement
-from openai_parser import OpenAIInterface
+from supabase_manager import SupabaseManager
 
 from modulos.normalidade_escore_total_pcl5.calculo_normalidade_escore_total_pcl5 import (
     #calcular_normalidade_escore_total_pcl5,
@@ -21,6 +21,7 @@ from modulos.normalidade_escore_total_pcl5.calculo_normalidade_escore_total_pcl5
 
 from openai_interface import (
     carregar_conclusoes,
+    processar_visao_imagem
 )
 
 def carregar_dados():
@@ -87,33 +88,32 @@ def processar_normalidade_escore_total_pcl5():
     st.pyplot(fig_qq_exemplo)
     plt.close(fig_qq_exemplo)# Fechar a figura
 
-    fig_manager = FigManagement()
-    openai_interface = OpenAIInterface()
 
-    # Salvar e converter gráficos em base64
-    caminho_histograma = fig_manager.salvar_grafico(fig_hist)
-    imagem_base64_histograma = openai_interface.encode_image_to_base64(caminho_histograma)
-    descricao_hist = openai_interface.descrever_imagem_base64(imagem_base64_histograma)
-    if debug:
-        print("Descrição Histograma:", descricao_hist)
-    fig_manager.apagar_grafico(caminho_histograma)
+    # Verificar se já existe uma conclusão armazenada
+    supabase_manager = SupabaseManager()
+    existing_conclusions = supabase_manager.recuperar_conclusoes(analysis_id)
 
-    caminho_grafico_qq = fig_manager.salvar_grafico(fig_qq)
-    imagem_base64_grafico_qq = openai_interface.encode_image_to_base64(caminho_grafico_qq)
-    descricao_qq = openai_interface.descrever_imagem_base64(imagem_base64_grafico_qq)
-    if debug:
-        print("Descrição Gráfico Q-Q:", descricao_qq)
-    fig_manager.apagar_grafico(caminho_grafico_qq)
+    if not existing_conclusions:
 
-    # Preparar o texto para geração de conclusões
-    resultados_texto = f"Resultados do Teste de Normalidade para {selected_var} (p-valor): {formatar_p_valor(p_valor)}\n\n"
-    resultados_texto += f"Descrição do Histograma: {descricao_hist}\n\n"
-    resultados_texto += f"Descrição do Gráfico Q-Q: {descricao_qq}"
+        # Processar a visão dos gráficos caso não existam conclusões anteriores
+        prompt_hist = "Descrição do histograma de frequência dos valores totais do PCL-5, representando a distribuição dos escores de trauma na amostra de dados. Explique a forma da distribuição e indique a tendência central, se visível."
+        descricao_hist = processar_visao_imagem(fig_hist, prompt_hist)
 
-    if debug:
-        print("Texto para Geração de Conclusões:", resultados_texto)
+        prompt_qq = "Descrição do gráfico Q-Q para os escores totais do PCL-5, comparando a distribuição dos dados com uma distribuição normal teórica. Indique se os pontos estão alinhados com a linha de referência e o que isso sugere sobre a normalidade dos dados."
+        descricao_qq = processar_visao_imagem(fig_qq, prompt_qq)
 
-    # Gerar conclusões com base nos resultados e descrições
-    carregar_conclusoes(analysis_id, nome_analise, resultados_texto, instrucoes)
+        # Preparar o texto para geração de conclusões
+        resultados_texto = f"Resultados do Teste de Normalidade para {selected_var} (p-valor): {formatar_p_valor(p_valor)}\n\n"
+        resultados_texto += f"Descrição do Histograma: {descricao_hist}\n\n"
+        resultados_texto += f"Descrição do Gráfico Q-Q: {descricao_qq}"
+
+        if debug:
+            print("Texto para Geração de Conclusões:", resultados_texto)
+
+        # Gerar conclusões com base nos resultados e descrições
+        carregar_conclusoes(analysis_id, nome_analise, resultados_texto, instrucoes)
+    else:
+        # Carregar conclusões existentes sem gerar novas descrições
+        carregar_conclusoes(analysis_id, nome_analise)
 
 

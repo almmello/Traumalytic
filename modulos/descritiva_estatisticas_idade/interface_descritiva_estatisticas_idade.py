@@ -9,7 +9,7 @@ from modulos.descritiva_estatisticas_idade.conteudo_descritiva_estatisticas_idad
     explicar_estatisticas_idade,
 )
 
-def mostrar_estatisticas_idade():
+def mostrar_descritiva_estatisticas_idade():
     st.title("Estatísticas de Idade")
 
     explicar_estatisticas_idade()
@@ -17,6 +17,6 @@ def mostrar_estatisticas_idade():
 
 # Chamada da função principal
 if __name__ == "__main__":
-    mostrar_estatisticas_idade()
+    mostrar_descritiva_estatisticas_idade()
 
 

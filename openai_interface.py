@@ -1,11 +1,12 @@
 # Importações necessárias
 from openai_parser import OpenAIInterface
 from supabase_manager import SupabaseManager
+from fig_management import FigManagement
 import streamlit as st
 import os
 
 
-def carregar_conclusoes(analysis_id, nome_analise, resultados, instrucoes):
+def carregar_conclusoes(analysis_id, nome_analise, resultados=None, instrucoes=None):
 
     supabase_manager = SupabaseManager()
     existing_conclusions = supabase_manager.recuperar_conclusoes(analysis_id)
@@ -69,3 +70,20 @@ def gerar_nova_conclusao(analysis_id, comentario):
     supabase_manager.inserir_conclusao(analysis_id, 'response', updated_conclusion, 'ativa')
 
     return updated_conclusion
+
+
+def processar_visao_imagem(figura, prompt_text):
+    debug = True  # Defina como False para desativar os logs de depuração
+    fig_manager = FigManagement()
+    openai_interface = OpenAIInterface()
+
+    # Salvar e converter a figura em base64
+    caminho_figura = fig_manager.salvar_grafico(figura)
+    imagem_base64 = openai_interface.encode_image_to_base64(caminho_figura)
+    descricao = openai_interface.descrever_imagem_base64(imagem_base64, prompt_text)
+    fig_manager.apagar_grafico(caminho_figura)
+
+    if debug:
+        print(f"Descrição da Imagem ({prompt_text}):", descricao)
+
+    return descricao

@@ -10,7 +10,7 @@ from modulos.descritiva_estatisticas_clusters_pcl5.conteudo_descritiva_estatisti
 )
 
 def mostrar_descritiva_estatisticas_clusters_pcl5():
-    st.title("Estatísticas dos Clusters PCL-5")
+    st.title("Estatísticas dos Clusters e do Escore Total do PCL-5")
 
     explicar_descritiva_estatisticas_clusters_pcl5()
     processar_descritiva_estatisticas_clusters_pcl5()

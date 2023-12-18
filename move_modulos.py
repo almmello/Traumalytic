@@ -1,10 +1,22 @@
 import os
 import shutil
+from dotenv import load_dotenv
 
 def main():
-    # Definindo os caminhos de origem e destino
-    origem = "C:\\Users\\almme\\Meu Drive\\Pessoas\\Thelma\\Análise de Dados\\modulos\\Criados"
-    destino = "C:\\Users\\almme\\Documents\\Github\\Traumalytic\\Development"
+    # Carregar variáveis de ambiente do arquivo .env
+    load_dotenv()
+
+    # Definir ambiente atual
+    ambienteAtual = "Mac"  # Mude para "Mac" caso esteja no Macintosh
+
+    # Definindo os caminhos de origem e destino com base no ambiente
+    if ambienteAtual == "Mac":
+        origem = os.getenv("origemMac")
+        destino = os.getenv("destinoMac")
+    else:
+        origem = os.getenv("origemWin")
+        destino = os.getenv("destinoWin")
+    
     dirModulo = "modulos"
 
     # Apagar o arquivo sidemenu.py no destino, se existir, e mover o novo
@@ -28,7 +40,7 @@ def main():
     for item in os.listdir(origem):
         item_path = os.path.join(origem, item)
         if os.path.isdir(item_path):
-            shutil.move(item_path, dirModulo, destino)
+            shutil.move(item_path, os.path.join(destino, dirModulo))
 
     print("Arquivos e pastas movidos com sucesso.")
 

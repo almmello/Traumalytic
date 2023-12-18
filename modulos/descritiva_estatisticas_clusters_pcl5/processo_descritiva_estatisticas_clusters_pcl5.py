@@ -20,8 +20,8 @@ def carregar_dados():
 def processar_descritiva_estatisticas_clusters_pcl5():
     APP_USER = os.getenv("ENV_USER")
     analysis_id = 'descritiva_estatisticas_clusters_pcl5'
-    nome_analise = 'Análise Estatísticas dos Clusters PCL-5'
-    instrucoes = "Analisando os resultados da Análise Estatísticas dos Clusters PCL-5, forneça uma conclusão detalhada e útil sobre as implicações desses dados."
+    nome_analise = 'Análise Estatísticas dos Clusters e Escore Total do PCL-5'
+    instrucoes = "Analisando os resultados da análise estatísticas dos clusters e do escore total do PCL-5, forneça uma conclusão detalhada e útil sobre as implicações desses dados."
 
     # Inicializar reset_counter no estado da sessão, se não existir
     if 'reset_counter' not in st.session_state:
@@ -30,6 +30,7 @@ def processar_descritiva_estatisticas_clusters_pcl5():
     carregar_dados()
 
     resultados = calcular_descritiva_estatisticas_clusters_pcl5(st.session_state['data'])
-    st.write('Estatísticas dos Clusters PCL-5:', resultados)
+
+    st.write('Estatísticas dos Clusters e do Escore Total do PCL-5:', resultados)
 
     carregar_conclusoes(analysis_id, nome_analise, resultados, instrucoes)

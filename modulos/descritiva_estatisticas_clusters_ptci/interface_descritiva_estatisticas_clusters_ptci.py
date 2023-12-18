@@ -10,7 +10,7 @@ from modulos.descritiva_estatisticas_clusters_ptci.conteudo_descritiva_estatisti
 )
 
 def mostrar_descritiva_estatisticas_clusters_ptci():
-    st.title("Estatísticas dos Clusters PTCI")
+    st.title("Estatísticas dos Clusters e do Escore Total do PTCI")
 
     explicar_descritiva_estatisticas_clusters_ptci()
     processar_descritiva_estatisticas_clusters_ptci()
