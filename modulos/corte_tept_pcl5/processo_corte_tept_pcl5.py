@@ -33,7 +33,7 @@ def processar_corte_tept_pcl5():
     carregar_dados()
 
     # Gerar as tabelas separadas
-    estatisticas_gerais = gerar_estatisticas_gerais_tept(st.session_state['data'])
+    estatisticas_gerais = gerar_estatisticas_gerais_tept()
     frequencias = gerar_frequencias_tept(st.session_state['data'])
 
     # Exibir as tabelas na tela

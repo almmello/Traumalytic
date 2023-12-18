@@ -41,6 +41,8 @@ class DataLoader:
             return pd.DataFrame()
 
     def apply_filter(self, dados):
+        dados_iniciais = dados.shape[0]
+
         if self.remover_nulos_idade:
             dados = dados[pd.to_numeric(dados['IDADE'], errors='coerce').notna()]
 
@@ -54,6 +56,16 @@ class DataLoader:
         if self.remover_nulos_pcl5:
             PCL5_COLS = [f'PCL{i:02d}' for i in range(1, 21)]
             dados = dados.dropna(subset=PCL5_COLS, how='any')
+
+        # Agora que todos os filtros foram aplicados, faça a contagem
+        dados_finais = dados.shape[0]
+        dados_missing = dados_iniciais - dados_finais
+
+        # Atualiza o estado da sessão com as contagens finais
+        st.session_state['valid_count'] = dados_finais
+        st.session_state['missing_count'] = dados_missing
+
+
 
         return dados
 
