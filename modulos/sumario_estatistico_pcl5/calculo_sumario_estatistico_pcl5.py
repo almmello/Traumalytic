@@ -2,24 +2,23 @@ import pandas as pd
 import streamlit as st
 import numpy as np
 from scipy import stats
-from scipy.stats import t
 from scipy.stats import trim_mean
 
 
 
-def gerar_sumario_validade():
+def gerar_sumario_validade_pcl5():
     valid_count = st.session_state.get('valid_count', 0)
     missing_count = st.session_state.get('missing_count', 0)
     total_count = valid_count + missing_count
 
     sumario_validade = pd.DataFrame({
-        'Valid - N': [valid_count, valid_count],  # Mesmo número para PCL-5 e PTCI
-        'Valid - Percent': [f"{valid_count / total_count * 100:.2f}%", f"{valid_count / total_count * 100:.2f}%"],
-        'Missing - N': [missing_count, missing_count],  # Mesmo número para PCL-5 e PTCI
-        'Missing - Percent': [f"{missing_count / total_count * 100:.2f}%", f"{missing_count / total_count * 100:.2f}%"],
-        'Total - N': [total_count, total_count],
-        'Total - Percent': ['100.00%', '100.00%']  # Total sempre será 100%
-    }, index=['PCL-5 Total', 'PTCI Total'])
+        'Valid - N': [valid_count],  # Mesmo número para PCL-5 e PTCI
+        'Valid - Percent': [f"{valid_count / total_count * 100:.2f}%"],
+        'Missing - N': [missing_count],  # Mesmo número para PCL-5 e PTCI
+        'Missing - Percent': [f"{missing_count / total_count * 100:.2f}%"],
+        'Total - N': [total_count],
+        'Total - Percent': ['100.00%']  # Total sempre será 100%
+    }, index=['PCL-5 Total'])
 
     return sumario_validade
 
@@ -36,29 +35,12 @@ def calcular_clusters_pcl5(data):
 
     return data
 
-def calcular_clusters_ptci(data):
-    # Fórmulas para os clusters do PTCI
-    clusters_ptci = {
-        'PTCI_Total': ['PTCI01', 'PTCI02', 'PTCI03', 'PTCI04', 'PTCI05', 'PTCI06', 'PTCI07', 'PTCI08', 'PTCI09', 'PTCI10', 'PTCI11', 'PTCI12', 'PTCI14', 'PTCI15', 'PTCI16', 'PTCI17', 'PTCI18', 'PTCI19', 'PTCI20', 'PTCI21', 'PTCI22', 'PTCI23', 'PTCI24', 'PTCI25', 'PTCI26', 'PTCI27', 'PTCI28', 'PTCI29', 'PTCI30', 'PTCI31', 'PTCI33', 'PTCI35', 'PTCI36']
-    }
-
-    # Calcula a soma e média para cada cluster
-    for cluster, questions in clusters_ptci.items():
-        data[cluster] = data[questions].sum(axis=1)
-  
-    return data
 
 
-
-def gerar_descritivos_estatisticos(data, escore_type):
-    if escore_type == 'PCL5':
-        escore_col = 'PCL5_Total'
-        calcular_clusters_pcl5(data)
-    elif escore_type == 'PTCI':
-        escore_col = 'PTCI_Total'
-        calcular_clusters_ptci(data)
-    
-   
+def gerar_descritivos_estatisticos_pcl5(data):
+    escore_col = 'PCL5_Total'
+    calcular_clusters_pcl5(data)
+     
     # Cálculo das estatísticas descritivas
     mean = data[escore_col].mean()
     std_err_mean = data[escore_col].sem()  # Std. Error of the mean

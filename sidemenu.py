@@ -12,7 +12,9 @@ from modulos.descritiva_estatisticas_itens_ptci.interface_descritiva_estatistica
 from modulos.descritiva_estatisticas_clusters_pcl5.interface_descritiva_estatisticas_clusters_pcl5 import mostrar_descritiva_estatisticas_clusters_pcl5
 from modulos.descritiva_estatisticas_clusters_ptci.interface_descritiva_estatisticas_clusters_ptci import mostrar_descritiva_estatisticas_clusters_ptci
 from modulos.corte_tept_pcl5.interface_corte_tept_pcl5 import mostrar_corte_tept_pcl5
-from modulos.sumario_estatístico_pcl5_ptci.interface_sumario_estatístico_pcl5_ptci import mostrar_sumario_estatístico_pcl5_ptci
+from modulos.sumario_estatistico_pcl5.interface_sumario_estatistico_pcl5 import mostrar_sumario_estatistico_pcl5
+from modulos.sumario_estatistico_ptci.interface_sumario_estatistico_ptci import mostrar_sumario_estatistico_ptci
+from modulos.normalidade_escore_total_pcl5.interface_normalidade_escore_total_pcl5 import mostrar_normalidade_escore_total_pcl5
 
 def create_sidebar():
     st.sidebar.title("Traumalytics")
@@ -39,8 +41,12 @@ def create_sidebar():
         st.session_state['pagina_atual'] = 'descritiva_estatisticas_clusters_ptci'
     if st.sidebar.button("Análise de Corte TEPT PCL-5"):
         st.session_state['pagina_atual'] = 'corte_tept_pcl5'
-    if st.sidebar.button("Sumário Estatístico do PCL-5 e PTCI"):
-        st.session_state['pagina_atual'] = 'sumario_estatístico_pcl5_ptci'
+    if st.sidebar.button("Sumário Estatístico do PCL-5"):
+        st.session_state['pagina_atual'] = 'sumario_estatistico_pcl5'
+    if st.sidebar.button("Sumário Estatístico do PTCI"):
+        st.session_state['pagina_atual'] = 'sumario_estatistico_ptci'
+    if st.sidebar.button("Análise Normalidade do escore total do PCL-5"):
+        st.session_state['pagina_atual'] = 'normalidade_escore_total_pcl5'
 
 
     # Exibição de Conteúdo Baseado na Página Atual
@@ -64,5 +70,9 @@ def create_sidebar():
         mostrar_descritiva_estatisticas_clusters_ptci()
     elif st.session_state['pagina_atual'] == 'corte_tept_pcl5':
         mostrar_corte_tept_pcl5()
-    elif st.session_state['pagina_atual'] == 'sumario_estatístico_pcl5_ptci':
-        mostrar_sumario_estatístico_pcl5_ptci()
+    elif st.session_state['pagina_atual'] == 'sumario_estatistico_pcl5':
+        mostrar_sumario_estatistico_pcl5()
+    elif st.session_state['pagina_atual'] == 'sumario_estatistico_ptci':
+        mostrar_sumario_estatistico_ptci()
+    elif st.session_state['pagina_atual'] == 'normalidade_escore_total_pcl5':
+        mostrar_normalidade_escore_total_pcl5()
