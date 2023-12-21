@@ -14,8 +14,8 @@ from modulos.descritiva_estatisticas_clusters_ptci.interface_descritiva_estatist
 from modulos.corte_tept_pcl5.interface_corte_tept_pcl5 import mostrar_corte_tept_pcl5
 from modulos.sumario_estatistico_pcl5.interface_sumario_estatistico_pcl5 import mostrar_sumario_estatistico_pcl5
 from modulos.sumario_estatistico_ptci.interface_sumario_estatistico_ptci import mostrar_sumario_estatistico_ptci
-from modulos.teste_ks_pcl5_total.interface_teste_ks_pcl5_total import mostrar_teste_ks_pcl5_total
-from modulos.teste_ks_ptci_total.interface_teste_ks_ptci_total import mostrar_teste_ks_ptci_total
+from modulos.histograma_pcl5.interface_histograma_pcl5 import mostrar_histograma_pcl5
+from modulos.histograma_ptci.interface_histograma_ptci import mostrar_histograma_ptci
 
 def create_sidebar():
     st.sidebar.title("Traumalytics")
@@ -46,10 +46,10 @@ def create_sidebar():
         st.session_state['pagina_atual'] = 'sumario_estatistico_pcl5'
     if st.sidebar.button("Sumário Estatístico do PTCI"):
         st.session_state['pagina_atual'] = 'sumario_estatistico_ptci'
-    if st.sidebar.button("Teste K-S para PCL-5 Total"):
-        st.session_state['pagina_atual'] = 'teste_ks_pcl5_total'
-    if st.sidebar.button("Teste K-S para PTCI Total"):
-        st.session_state['pagina_atual'] = 'teste_ks_ptci_total'
+    if st.sidebar.button("Gráfico Histograma PCL-5"):
+        st.session_state['pagina_atual'] = 'histograma_pcl5'
+    if st.sidebar.button("Gráfico Histograma PTCI"):
+        st.session_state['pagina_atual'] = 'histograma_ptci'
 
 
     # Exibição de Conteúdo Baseado na Página Atual
@@ -77,7 +77,7 @@ def create_sidebar():
         mostrar_sumario_estatistico_pcl5()
     elif st.session_state['pagina_atual'] == 'sumario_estatistico_ptci':
         mostrar_sumario_estatistico_ptci()
-    elif st.session_state['pagina_atual'] == 'teste_ks_pcl5_total':
-        mostrar_teste_ks_pcl5_total()
-    elif st.session_state['pagina_atual'] == 'teste_ks_ptci_total':
-        mostrar_teste_ks_ptci_total()
+    elif st.session_state['pagina_atual'] == 'histograma_pcl5':
+        mostrar_histograma_pcl5()
+    elif st.session_state['pagina_atual'] == 'histograma_ptci':
+        mostrar_histograma_ptci()
