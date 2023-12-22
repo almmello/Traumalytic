@@ -26,10 +26,10 @@ def carregar_conclusoes(analysis_id, nome_analise, resultados=None, instrucoes=N
         contador = 1
         st.subheader('Conclusão:')
         for message in chat_history:
-            if message['type'] == 'response':
+            if message['type'] == 'resposta':
                 
                 st.subheader(f'Conclusão {contador:02d}')                
-            elif message['type'] == 'comment':
+            elif message['type'] == 'comentario':
                 contador -= 1
                 st.subheader(f'Comentário {contador:02d}')
             
@@ -72,8 +72,8 @@ def gerar_nova_conclusao(analysis_id, comentario):
     updated_conclusion = response.content
 
     # Inserir o novo comentário e a conclusão atualizada no banco de dados
-    supabase_manager.inserir_conclusao(analysis_id, 'comment', comentario, 'ativa')
-    supabase_manager.inserir_conclusao(analysis_id, 'response', updated_conclusion, 'ativa')
+    supabase_manager.inserir_conclusao(analysis_id, 'comentario', comentario, 'ativa')
+    supabase_manager.inserir_conclusao(analysis_id, 'resposta', updated_conclusion, 'ativa')
 
     return updated_conclusion
 

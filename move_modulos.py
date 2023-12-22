@@ -7,7 +7,7 @@ def main():
     load_dotenv()
 
     # Definir ambiente atual
-    ambienteAtual = "Win"  # Mude para "Mac" caso esteja no Macintosh
+    ambienteAtual = "Mac"  # Mude para "Mac" caso esteja no Macintosh
 
     # Definindo os caminhos de origem e destino com base no ambiente
     if ambienteAtual == "Mac":
