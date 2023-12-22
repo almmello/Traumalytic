@@ -18,6 +18,8 @@ from modulos.histograma_pcl5.interface_histograma_pcl5 import mostrar_histograma
 from modulos.histograma_ptci.interface_histograma_ptci import mostrar_histograma_ptci
 from modulos.caule_folhas_pcl5.interface_caule_folhas_pcl5 import mostrar_caule_folhas_pcl5
 from modulos.caule_folhas_ptci.interface_caule_folhas_ptci import mostrar_caule_folhas_ptci
+from modulos.boxplot_pcl5.interface_boxplot_pcl5 import mostrar_boxplot_pcl5
+from modulos.boxplot_ptci.interface_boxplot_ptci import mostrar_boxplot_ptci
 
 def create_sidebar():
     st.sidebar.title("Traumalytics")
@@ -56,6 +58,10 @@ def create_sidebar():
         st.session_state['pagina_atual'] = 'caule_folhas_pcl5'
     if st.sidebar.button("Exibição de Caule-e-Folhas do PTCI"):
         st.session_state['pagina_atual'] = 'caule_folhas_ptci'
+    if st.sidebar.button("Gráfico Boxplot do PCL-5"):
+        st.session_state['pagina_atual'] = 'boxplot_pcl5'
+    if st.sidebar.button("Gráfico Boxplot do PTCI"):
+        st.session_state['pagina_atual'] = 'boxplot_ptci'
 
 
     # Exibição de Conteúdo Baseado na Página Atual
@@ -91,3 +97,7 @@ def create_sidebar():
         mostrar_caule_folhas_pcl5()
     elif st.session_state['pagina_atual'] == 'caule_folhas_ptci':
         mostrar_caule_folhas_ptci()
+    elif st.session_state['pagina_atual'] == 'boxplot_pcl5':
+        mostrar_boxplot_pcl5()
+    elif st.session_state['pagina_atual'] == 'boxplot_ptci':
+        mostrar_boxplot_ptci()
