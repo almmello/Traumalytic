@@ -48,12 +48,3 @@ def processar_estatisticas_variaveis_categoricas():
     carregar_conclusoes(analysis_id, nome_analise, texto_resultados, instrucoes)
 
 
-
-
-    st.write('Estatísticas de Variáveis Categóricas:', resultados)
-
-    # Formatar os resultados para a conclusão
-    resultados_formatados = formatar_resultados_para_texto(resultados)
-
-    # Carregar as conclusões
-    carregar_conclusoes(analysis_id, nome_analise, resultados_formatados, instrucoes)
