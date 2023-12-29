@@ -60,22 +60,35 @@ def gerar_conclusao(analysis_id, instrucoes, resultados):
 
 
 def gerar_nova_conclusao(analysis_id, comentario):
-
+    debug = True  # Defina como False para desativar os logs de depuração
     supabase_manager = SupabaseManager()
     openai_interface = OpenAIInterface()
 
+    if debug:
+        print("\nIniciando a geração de nova conclusão para a análise ID:", analysis_id, "\n")
+
     # Recuperar todas as conclusões existentes para a análise
     existing_conclusions = supabase_manager.recuperar_conclusoes(analysis_id)
+    if debug:
+        print("\nConclusões existentes recuperadas:", existing_conclusions, "\n")
 
     # Solicitar à OpenAI para processar o chat e fornecer uma conclusão atualizada
     response = openai_interface.criar_conclusao("", "", comentario, existing_conclusions)  # "" representa instrucoes e resultados vazios
     updated_conclusion = response.content
+    if debug:
+        print("\nResposta da OpenAI recebida:", updated_conclusion, "\n")
 
     # Inserir o novo comentário e a conclusão atualizada no banco de dados
     supabase_manager.inserir_conclusao(analysis_id, 'comentario', comentario, 'ativa')
+    if debug:
+        print("\nNovo comentário inserido no banco de dados para a análise ID:", analysis_id, "\n")
+
     supabase_manager.inserir_conclusao(analysis_id, 'resposta', updated_conclusion, 'ativa')
+    if debug:
+        print("\nConclusão atualizada inserida no banco de dados para a análise ID:", analysis_id, "\n")
 
     return updated_conclusion
+
 
 
 def processar_visao_imagem(figura, prompt_text):

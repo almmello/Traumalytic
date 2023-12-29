@@ -52,7 +52,7 @@ def processar_boxplot_pcl5():
         descricao_plot = processar_visao_imagem(fig, prompt_plot)
 
         # Preparar o texto para geração de conclusões
-        resultados_texto = f"Descrição do Boxplot: {descricao_plot}"
+        resultados_texto = f"Descrição do {nome_analise}: {descricao_plot}"
 
         if debug:
             print("Texto para Geração de Conclusões: ", resultados_texto)

@@ -26,6 +26,7 @@ from modulos.probabilidade_normal_pcl5.interface_probabilidade_normal_pcl5 impor
 from modulos.probabilidade_normal_ptci.interface_probabilidade_normal_ptci import mostrar_probabilidade_normal_ptci
 from modulos.detrended_qq_pcl5.interface_detrended_qq_pcl5 import mostrar_detrended_qq_pcl5
 from modulos.detrended_qq_ptci.interface_detrended_qq_ptci import mostrar_detrended_qq_ptci
+from modulos.corr_pearson_pcl5_total_ptci_total.interface_corr_pearson_pcl5_total_ptci_total import mostrar_corr_pearson_pcl5_total_ptci_total
 
 def create_sidebar():
     st.sidebar.title("Traumalytics")
@@ -81,6 +82,9 @@ def create_sidebar():
         st.session_state['pagina_atual'] = 'detrended_qq_pcl5'
     if st.sidebar.button("Gráfico de Probabilidade Normal (Q-Q) Sem Tendência do PTCI"):
         st.session_state['pagina_atual'] = 'detrended_qq_ptci'
+    st.sidebar.markdown("## Análise de Correlação")
+    if st.sidebar.button("Correlação Paramétrica entre PCL5 Total e PTCI Total"):
+        st.session_state['pagina_atual'] = 'corr_pearson_pcl5_total_ptci_total'
 
 
     # Exibição de Conteúdo Baseado na Página Atual
@@ -132,3 +136,5 @@ def create_sidebar():
         mostrar_detrended_qq_pcl5()
     elif st.session_state['pagina_atual'] == 'detrended_qq_ptci':
         mostrar_detrended_qq_ptci()
+    elif st.session_state['pagina_atual'] == 'corr_pearson_pcl5_total_ptci_total':
+        mostrar_corr_pearson_pcl5_total_ptci_total()
