@@ -27,6 +27,8 @@ from modulos.probabilidade_normal_ptci.interface_probabilidade_normal_ptci impor
 from modulos.detrended_qq_pcl5.interface_detrended_qq_pcl5 import mostrar_detrended_qq_pcl5
 from modulos.detrended_qq_ptci.interface_detrended_qq_ptci import mostrar_detrended_qq_ptci
 from modulos.corr_pearson_pcl5_total_ptci_total.interface_corr_pearson_pcl5_total_ptci_total import mostrar_corr_pearson_pcl5_total_ptci_total
+from modulos.corr_pearson_pcl5_clusters_ptci_clusters.interface_corr_pearson_pcl5_clusters_ptci_clusters import mostrar_corr_pearson_pcl5_clusters_ptci_clusters
+from modulos.corr_pearson_pcl5_itens_ptci_itens.interface_corr_pearson_pcl5_itens_ptci_itens import mostrar_corr_pearson_pcl5_itens_ptci_itens
 
 def create_sidebar():
     st.sidebar.title("Traumalytics")
@@ -85,6 +87,10 @@ def create_sidebar():
     st.sidebar.markdown("## Análise de Correlação")
     if st.sidebar.button("Correlação Paramétrica entre PCL5 Total e PTCI Total"):
         st.session_state['pagina_atual'] = 'corr_pearson_pcl5_total_ptci_total'
+    if st.sidebar.button("Correlação Paramétrica entre os Clusters do PCL5 e PTCI"):
+        st.session_state['pagina_atual'] = 'corr_pearson_pcl5_clusters_ptci_clusters'
+    if st.sidebar.button("Correlação Paramétrica entre os Itens do PCL5 e PTCI"):
+        st.session_state['pagina_atual'] = 'corr_pearson_pcl5_itens_ptci_itens'
 
 
     # Exibição de Conteúdo Baseado na Página Atual
@@ -138,3 +144,7 @@ def create_sidebar():
         mostrar_detrended_qq_ptci()
     elif st.session_state['pagina_atual'] == 'corr_pearson_pcl5_total_ptci_total':
         mostrar_corr_pearson_pcl5_total_ptci_total()
+    elif st.session_state['pagina_atual'] == 'corr_pearson_pcl5_clusters_ptci_clusters':
+        mostrar_corr_pearson_pcl5_clusters_ptci_clusters()
+    elif st.session_state['pagina_atual'] == 'corr_pearson_pcl5_itens_ptci_itens':
+        mostrar_corr_pearson_pcl5_itens_ptci_itens()

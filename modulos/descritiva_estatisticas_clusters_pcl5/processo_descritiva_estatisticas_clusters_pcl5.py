@@ -2,12 +2,18 @@ import streamlit as st
 import os
 from data_loader import DataLoader
 
+from modulos.descritiva_estatisticas_clusters_pcl5.conteudo_descritiva_estatisticas_clusters_pcl5 import (
+    analysis_id,
+    nome_analise,
+    instrucoes,
+)
+
 from modulos.descritiva_estatisticas_clusters_pcl5.calculo_descritiva_estatisticas_clusters_pcl5 import (
     calcular_descritiva_estatisticas_clusters_pcl5
 )
 
-from openai_interface import (
-    carregar_conclusoes,
+from openai_processes import (
+    processar_conclusoes_tabela,
 )
 
 from supabase_manager import SupabaseManager
@@ -18,11 +24,9 @@ def carregar_dados():
         st.session_state['data'] = data_loader.carregar_dados()
 
 def processar_descritiva_estatisticas_clusters_pcl5():
+    debug = True  # Defina como False para desativar os logs de depuração
     APP_USER = os.getenv("ENV_USER")
-    analysis_id = 'descritiva_estatisticas_clusters_pcl5'
-    nome_analise = 'Análise Estatísticas dos Clusters e Escore Total do PCL-5'
-    instrucoes = "Analisando os resultados da análise estatísticas dos clusters e do escore total do PCL-5, forneça uma conclusão detalhada e útil sobre as implicações desses dados."
-
+    
     # Inicializar reset_counter no estado da sessão, se não existir
     if 'reset_counter' not in st.session_state:
         st.session_state['reset_counter'] = 0
@@ -33,4 +37,5 @@ def processar_descritiva_estatisticas_clusters_pcl5():
 
     st.write('Estatísticas dos Clusters e do Escore Total do PCL-5:', resultados)
 
-    carregar_conclusoes(analysis_id, nome_analise, resultados, instrucoes)
+    # Carregar as conclusões
+    processar_conclusoes_tabela(analysis_id, resultados, nome_analise, instrucoes, debug)

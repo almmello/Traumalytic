@@ -2,13 +2,18 @@ import streamlit as st
 import os
 from data_loader import DataLoader
 
-from modulos.estatisticas_variaveis_categoricas.calculo_estatisticas_variaveis_categoricas import (
-    calcular_estatisticas_variaveis_categoricas,
-    formatar_resultados_para_texto
+from modulos.estatisticas_variaveis_categoricas.conteudo_estatisticas_variaveis_categoricas import (
+    analysis_id,
+    nome_analise,
+    instrucoes,
 )
 
-from openai_interface import (
-    carregar_conclusoes,
+from modulos.estatisticas_variaveis_categoricas.calculo_estatisticas_variaveis_categoricas import (
+    calcular_estatisticas_variaveis_categoricas,
+)
+
+from openai_processes import (
+    processar_conclusoes_tabela,
 )
 
 def carregar_dados():
@@ -17,10 +22,8 @@ def carregar_dados():
         st.session_state['data'] = data_loader.carregar_dados()
 
 def processar_estatisticas_variaveis_categoricas():
+    debug = True  # Defina como False para desativar os logs de depuração
     APP_USER = os.getenv("ENV_USER")
-    analysis_id = 'estatisticas_variaveis_categoricas'
-    nome_analise = 'Estatísticas de Variáveis Categóricas'
-    instrucoes = "Analisando os resultados da Estatísticas de Variáveis Categóricas, forneça uma conclusão detalhada e útil sobre as implicações desses dados."
 
     # Inicializar reset_counter no estado da sessão, se não existir
     if 'reset_counter' not in st.session_state:
@@ -41,10 +44,6 @@ def processar_estatisticas_variaveis_categoricas():
         # Armazenando os resultados
         resultados_agrupados[coluna] = resultados
 
-    # Convertendo resultados agrupados para texto
-    texto_resultados = formatar_resultados_para_texto(resultados_agrupados)
-
     # Passando o texto concatenado para o método carregar_conclusoes
-    carregar_conclusoes(analysis_id, nome_analise, texto_resultados, instrucoes)
-
+    processar_conclusoes_tabela(analysis_id, resultados_agrupados, nome_analise, instrucoes, debug)
 

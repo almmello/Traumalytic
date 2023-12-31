@@ -1,14 +1,4 @@
 import pandas as pd
-
-def formatar_resultados_para_texto(resultados):
-    texto = ""
-    for coluna, estatisticas in resultados.items():
-        texto += f"Estatísticas para '{coluna}':\n"
-        texto += estatisticas.to_string() + "\n\n"
-    return texto
-
-
-import pandas as pd
 import numpy as np
 
 def calcular_estatisticas_variaveis_categoricas(data, coluna):

@@ -10,3 +10,7 @@ def explicar_descritiva_estatisticas_itens_ptci():
     Os desvios padrão refletem a variação nas respostas, mostrando quão diversificadas são as experiências e percepções dos participantes em relação a cada item.
     Os valores mínimos e máximos destacam a extensão da escala de resposta para cada pergunta do questionário, fornecendo uma visão sobre a amplitude das cognições pós-traumáticas avaliadas.
     """)
+
+analysis_id = 'descritiva_estatisticas_itens_ptci'
+nome_analise = 'Análise Estatísticas dos Itens do PTCI'
+instrucoes = "Analisando os resultados da Análise Estatísticas dos Itens do PTCI, forneça uma conclusão detalhada e útil sobre as implicações desses dados."

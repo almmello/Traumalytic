@@ -25,6 +25,12 @@ class SupabaseManager:
         response = self.supabase.table("conclusions").select("*").eq("analysis_id", analysis_id).eq("user_id", APP_USER).execute()
         # Assuming the response contains a 'data' attribute with the actual results
         return response.data if response else []
+    
+    def recuperar_resultados(self, analysis_id):
+        APP_USER = os.getenv("ENV_USER")  # Get the system user from environment variable
+        response = self.supabase.table("conclusions").select("*").eq("analysis_id", analysis_id).eq("user_id", APP_USER).eq("type",'resultado').execute()
+        # Assuming the response contains a 'data' attribute with the actual results
+        return response.data if response else []
 
     def atualizar_conclusao(self, id, updated_data):
         return self.supabase.table("conclusions").update(updated_data).eq("id", id).execute()

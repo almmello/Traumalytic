@@ -12,4 +12,8 @@ def explicar_frequencias_tept():
     Após a aplicação do ponto de corte no PCL-5, esta análise detalha a frequência e a porcentagem dos participantes que possuem ou não sintomas que sugerem TEPT. Inclui a porcentagem válida dos diagnósticos e a porcentagem cumulativa, permitindo avaliar a distribuição dos sintomas de TEPT dentro da amostra estudada.
     """)
 
+analysis_id = 'corte_tept_pcl5'
+nome_analise = 'Análise de Frequência de Diagnóstico de TEPT com Ponto de Corte do PCL-5'
+instrucoes = "Analisando os resultados da Análise de Corte TEPT PCL-5, forneça uma conclusão detalhada e útil sobre as implicações desses dados."
+
 

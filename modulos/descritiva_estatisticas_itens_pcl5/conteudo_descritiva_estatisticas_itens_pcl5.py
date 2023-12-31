@@ -9,3 +9,6 @@ def explicar_descritiva_estatisticas_itens_pcl5():
     Os valores mínimos e máximos destacam a extensão da escala de resposta para cada pergunta do questionário.
     """)
 
+analysis_id = 'descritiva_estatisticas_itens_pcl5'
+nome_analise = 'Análise Estatísticas dos Itens do PCL-5'
+instrucoes = "Analisando os resultados da Análise Estatísticas dos Itens do PCL-5, forneça uma conclusão detalhada e útil sobre as implicações desses dados."

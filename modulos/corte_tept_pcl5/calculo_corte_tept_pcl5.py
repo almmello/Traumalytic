@@ -1,22 +1,6 @@
 import pandas as pd
 import streamlit as st
-
-
-def calcular_clusters_pcl5(data):
-    # Fórmulas para os clusters do PCL-5
-    clusters_pcl5 = {
-        'Cluster_B': ['PCL01', 'PCL02', 'PCL03', 'PCL04', 'PCL05'],
-        'Cluster_C': ['PCL06', 'PCL07'],
-        'Cluster_D': ['PCL08', 'PCL09', 'PCL10', 'PCL11', 'PCL12', 'PCL13', 'PCL14'],
-        'Cluster_E': ['PCL15', 'PCL16', 'PCL17', 'PCL18', 'PCL19', 'PCL20'],
-        'PCL5_Total': ['PCL01', 'PCL02', 'PCL03', 'PCL04', 'PCL05', 'PCL06', 'PCL07', 'PCL08', 'PCL09', 'PCL10', 'PCL11', 'PCL12', 'PCL13', 'PCL14', 'PCL15', 'PCL16', 'PCL17', 'PCL18', 'PCL19', 'PCL20']
-    }
-
-    for cluster, questions in clusters_pcl5.items():
-        data[cluster] = data[questions].sum(axis=1)
-        data[cluster + '_media'] = data[cluster] / len(questions)
-
-    return data
+from data_loader import DataLoader
 
 def gerar_estatisticas_gerais_tept():
     # Usa o estado da sessão para obter o número de itens válidos e faltantes
@@ -37,7 +21,7 @@ def gerar_estatisticas_gerais_tept():
 
 def gerar_frequencias_tept(data):
     ponto_de_corte = st.session_state.get('ponto_de_corte_tept')
-    calcular_clusters_pcl5(data)
+    DataLoader.calculos_pcl5(data)
     data['TEPT_Diag'] = (data['PCL5_Total'] >= ponto_de_corte).astype(int)
     
     valid_total = st.session_state['valid_count']

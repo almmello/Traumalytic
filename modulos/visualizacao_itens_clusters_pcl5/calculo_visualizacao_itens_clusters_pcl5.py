@@ -1,4 +1,5 @@
 import pandas as pd
+from data_loader import DataLoader
 
 ## Funções calcular_clusters_ptci e calcular_clusters_pcl5
 
@@ -16,10 +17,10 @@ def mostrar_apenas_clusters_pcl5(data):
 def calcular_clusters_pcl5(data):
     # Fórmulas para os clusters do PCL-5
     clusters_pcl5 = {
-        'Cluster_B': ['PCL01', 'PCL02', 'PCL03', 'PCL04', 'PCL05'],
-        'Cluster_C': ['PCL06', 'PCL07'],
-        'Cluster_D': ['PCL08', 'PCL09', 'PCL10', 'PCL11', 'PCL12', 'PCL13', 'PCL14'],
-        'Cluster_E': ['PCL15', 'PCL16', 'PCL17', 'PCL18', 'PCL19', 'PCL20'],
+        'PCL5_Cluster_B': ['PCL01', 'PCL02', 'PCL03', 'PCL04', 'PCL05'],
+        'PCL5_Cluster_C': ['PCL06', 'PCL07'],
+        'PCL5_Cluster_D': ['PCL08', 'PCL09', 'PCL10', 'PCL11', 'PCL12', 'PCL13', 'PCL14'],
+        'PCL5_Cluster_E': ['PCL15', 'PCL16', 'PCL17', 'PCL18', 'PCL19', 'PCL20'],
         'PCL5_total': ['PCL01', 'PCL02', 'PCL03', 'PCL04', 'PCL05', 'PCL06', 'PCL07', 'PCL08', 'PCL09', 'PCL10', 'PCL11', 'PCL12', 'PCL13', 'PCL14', 'PCL15', 'PCL16', 'PCL17', 'PCL18', 'PCL19', 'PCL20']
     }
 
