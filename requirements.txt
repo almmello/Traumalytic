@@ -12,3 +12,4 @@ st-pages
 supabase
 statsmodels
 stemgraphic
+plotly
