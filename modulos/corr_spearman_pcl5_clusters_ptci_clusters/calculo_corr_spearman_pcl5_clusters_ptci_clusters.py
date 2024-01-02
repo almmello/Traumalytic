@@ -6,7 +6,7 @@ import numpy as np
 
 from data_loader import DataLoader
 
-def criar_corr_pearson_pcl5_clusters_ptci_clusters(data):
+def criar_corr_spearman_pcl5_clusters_ptci_clusters(data):
     # Utilize as funções de cálculo de clusters para adicionar os clusters ao dataframe
     DataLoader.calculos_pcl5(data)  # Preparação dos dados
     DataLoader.calculos_ptci(data)  # Preparação dos dados
@@ -19,16 +19,15 @@ def criar_corr_pearson_pcl5_clusters_ptci_clusters(data):
     heatmap_data = pd.DataFrame(index=vertical_axe, columns=horizontal_axe)
     p_values_data = pd.DataFrame(index=vertical_axe, columns=horizontal_axe)
     
-    # Calcular a correlação entre os clusters de PCL-5 e PTCI
+    # Calcular a correlação entre os clusters de PCL-5 e PTCI usando Spearman
     for v_column in vertical_axe:
         for h_column in horizontal_axe:
-            correlacao, p_value = stats.pearsonr(data[v_column], data[h_column])
+            correlacao, p_value = stats.spearmanr(data[v_column], data[h_column])
             heatmap_data.loc[v_column, h_column] = correlacao
-            p_values_data.loc[v_column, h_column] = p_value / 2  # p-value unilateral
-    
+            p_values_data.loc[v_column, h_column] = p_value
     
     # Criar o mapa de calor
-    fig, ax = plt.subplots(figsize=(12, 10))  # Ajuste o tamanho da figura conforme necessário (10, 8)
+    fig, ax = plt.subplots(figsize=(12, 10))  # Ajuste o tamanho da figura conforme necessário
     
     # Anotações com correlação, p-value e N
     n = len(data)
@@ -37,7 +36,7 @@ def criar_corr_pearson_pcl5_clusters_ptci_clusters(data):
                   np.vectorize(lambda x: f"N: {n}")(heatmap_data)
     
     sns.heatmap(heatmap_data.astype(float), annot=annotations.values, fmt="", cmap='coolwarm', cbar=True, ax=ax, linewidths=0.5)  # Ajuste linewidths conforme necessário
-    ax.set_title('Mapa de Calor de Correlação entre Clusters de PCL-5 e PTCI')
+    ax.set_title('Mapa de Calor de Correlação Spearman entre Clusters de PCL-5 e PTCI')
     plt.yticks(rotation=0)
     
     return fig

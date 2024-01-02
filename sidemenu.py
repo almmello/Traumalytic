@@ -29,6 +29,11 @@ from modulos.detrended_qq_ptci.interface_detrended_qq_ptci import mostrar_detren
 from modulos.corr_pearson_pcl5_total_ptci_total.interface_corr_pearson_pcl5_total_ptci_total import mostrar_corr_pearson_pcl5_total_ptci_total
 from modulos.corr_pearson_pcl5_clusters_ptci_clusters.interface_corr_pearson_pcl5_clusters_ptci_clusters import mostrar_corr_pearson_pcl5_clusters_ptci_clusters
 from modulos.corr_pearson_pcl5_itens_ptci_itens.interface_corr_pearson_pcl5_itens_ptci_itens import mostrar_corr_pearson_pcl5_itens_ptci_itens
+from modulos.corr_spearman_pcl5_total_ptci_total.interface_corr_spearman_pcl5_total_ptci_total import mostrar_corr_spearman_pcl5_total_ptci_total
+from modulos.corr_spearman_pcl5_clusters_ptci_clusters.interface_corr_spearman_pcl5_clusters_ptci_clusters import mostrar_corr_spearman_pcl5_clusters_ptci_clusters
+from modulos.corr_spearman_pcl5_itens_ptci_itens.interface_corr_spearman_pcl5_itens_ptci_itens import mostrar_corr_spearman_pcl5_itens_ptci_itens
+from modulos.teste_t_pcl5_total_ptci_total.interface_teste_t_pcl5_total_ptci_total import mostrar_teste_t_pcl5_total_ptci_total
+from modulos.teste_t_pcl5_clusters_ptci_clusters.interface_teste_t_pcl5_clusters_ptci_clusters import mostrar_teste_t_pcl5_clusters_ptci_clusters
 
 def create_sidebar():
     st.sidebar.title("Traumalytics")
@@ -85,12 +90,22 @@ def create_sidebar():
     if st.sidebar.button("Gráfico de Probabilidade Normal (Q-Q) Sem Tendência do PTCI"):
         st.session_state['pagina_atual'] = 'detrended_qq_ptci'
     st.sidebar.markdown("## Análise de Correlação")
-    if st.sidebar.button("Correlação Paramétrica entre PCL5 Total e PTCI Total"):
+    if st.sidebar.button("Correlação Pearson entre PCL5 Total e PTCI Total"):
         st.session_state['pagina_atual'] = 'corr_pearson_pcl5_total_ptci_total'
-    if st.sidebar.button("Correlação Paramétrica entre os Clusters do PCL5 e PTCI"):
+    if st.sidebar.button("Correlação Pearson entre os Clusters do PCL5 e PTCI"):
         st.session_state['pagina_atual'] = 'corr_pearson_pcl5_clusters_ptci_clusters'
-    if st.sidebar.button("Correlação Paramétrica entre os Itens do PCL5 e PTCI"):
+    if st.sidebar.button("Correlação Pearson entre os Itens do PCL5 e PTCI"):
         st.session_state['pagina_atual'] = 'corr_pearson_pcl5_itens_ptci_itens'
+    if st.sidebar.button("Correlação Spearman entre PCL5 Total e PTCI Total"):
+        st.session_state['pagina_atual'] = 'corr_spearman_pcl5_total_ptci_total'
+    if st.sidebar.button("Correlação Spearman entre os Clusters do PCL5 e PTCI"):
+        st.session_state['pagina_atual'] = 'corr_spearman_pcl5_clusters_ptci_clusters'
+    if st.sidebar.button("Correlação Spearman entre os Itens do PCL5 e PTCI"):
+        st.session_state['pagina_atual'] = 'corr_spearman_pcl5_itens_ptci_itens'
+    if st.sidebar.button("Teste T Student entre PCL5 Total e PTCI Total"):
+        st.session_state['pagina_atual'] = 'teste_t_pcl5_total_ptci_total'
+    if st.sidebar.button("Teste T Student entre os Clusters do PCL5 e PTCI"):
+        st.session_state['pagina_atual'] = 'teste_t_pcl5_clusters_ptci_clusters'
 
 
     # Exibição de Conteúdo Baseado na Página Atual
@@ -148,3 +163,13 @@ def create_sidebar():
         mostrar_corr_pearson_pcl5_clusters_ptci_clusters()
     elif st.session_state['pagina_atual'] == 'corr_pearson_pcl5_itens_ptci_itens':
         mostrar_corr_pearson_pcl5_itens_ptci_itens()
+    elif st.session_state['pagina_atual'] == 'corr_spearman_pcl5_total_ptci_total':
+        mostrar_corr_spearman_pcl5_total_ptci_total()
+    elif st.session_state['pagina_atual'] == 'corr_spearman_pcl5_clusters_ptci_clusters':
+        mostrar_corr_spearman_pcl5_clusters_ptci_clusters()
+    elif st.session_state['pagina_atual'] == 'corr_spearman_pcl5_itens_ptci_itens':
+        mostrar_corr_spearman_pcl5_itens_ptci_itens()
+    elif st.session_state['pagina_atual'] == 'teste_t_pcl5_total_ptci_total':
+        mostrar_teste_t_pcl5_total_ptci_total()
+    elif st.session_state['pagina_atual'] == 'teste_t_pcl5_clusters_ptci_clusters':
+        mostrar_teste_t_pcl5_clusters_ptci_clusters()
