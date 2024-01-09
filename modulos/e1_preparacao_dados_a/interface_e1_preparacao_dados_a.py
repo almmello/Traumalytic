@@ -10,7 +10,7 @@ from modulos.e1_preparacao_dados_a.conteudo_e1_preparacao_dados_a import (
 )
 
 def mostrar_e1_preparacao_dados_a():
-    st.title("Preparação dos Dados da Grandeza A")
+    st.title("Preparação dos Dados do Conjunto A")
 
     explicar_e1_preparacao_dados_a()
     processar_e1_preparacao_dados_a()

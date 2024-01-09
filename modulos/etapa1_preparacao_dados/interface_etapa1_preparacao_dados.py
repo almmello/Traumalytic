@@ -19,24 +19,24 @@ def mostrar_etapa1_preparacao_dados():
 
 
     data_loader.carregar_dados()
-    # Carregar mapeamento de grandezas
-    grandezas_dict = data_loader.carregar_grandezas()
-    grandezas_nomes = list(grandezas_dict.keys())
+    # Carregar mapeamento de conjuntos
+    conjuntos_dict = data_loader.carregar_conjuntos()
+    conjuntos_nomes = list(conjuntos_dict.keys())
 
-    # Escolha da grandeza
-    grandeza_selecionada_nome = st.selectbox("Selecione uma Grandeza", [''] + grandezas_nomes)
+    # Escolha do conjunto
+    conjunto_selecionada_nome = st.selectbox("Selecione um Conjunto", [''] + conjuntos_nomes)
 
-    if grandeza_selecionada_nome:
-        grandeza_selecionada_codigo = grandezas_dict[grandeza_selecionada_nome]
+    if conjunto_selecionada_nome:
+        conjunto_selecionada_codigo = conjuntos_dict[conjunto_selecionada_nome]
 
-        # Exibir opções de filtro relevantes para a grandeza selecionada
-        data_loader.mostrar_opcoes_filtro(grandeza_selecionada_codigo)
+        # Exibir opções de filtro relevantes para o conjunto selecionada
+        data_loader.mostrar_opcoes_filtro(conjunto_selecionada_codigo)
 
         # Aplicar filtro e carregar dados
         if st.button('Aplicar Filtro'):
             # Atualizar as variáveis de filtro
             data_loader.atualizar_filtros()
-            dados_filtrados = data_loader.gerar_grandeza(grandeza_selecionada_codigo)
+            dados_filtrados = data_loader.gerar_conjunto(conjunto_selecionada_codigo)
             st.write(dados_filtrados)
 
             mostrar_tabela_linhas()

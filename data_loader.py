@@ -117,33 +117,33 @@ class DataLoader:
 
 
 
-    def gerar_grandeza(self, grandeza_codigo):
+    def gerar_conjunto(self, conjunto_codigo):
         try:
-            logging.debug(f"Iniciando a função gerar_grandeza para o código: {grandeza_codigo}")
+            logging.debug(f"Iniciando a função gerar_conjunto para o código: {conjunto_codigo}")
 
-            # Carregar o mapeamento de grandezas
+            # Carregar o mapeamento de conjuntos
             data_map = limpar_e_carregar_csv('data_map.csv')
-            logging.debug("Mapeamento de grandezas carregado com sucesso")
+            logging.debug("Mapeamento de conjuntos carregado com sucesso")
 
-            # Verificar se a grandeza está no mapeamento
-            if grandeza_codigo not in data_map['Código'].values:
-                raise ValueError(f"Grandeza '{grandeza_codigo}' não encontrada no mapeamento")
+            # Verificar se o conjunto está no mapeamento
+            if conjunto_codigo not in data_map['Código'].values:
+                raise ValueError(f"Conjunto '{conjunto_codigo}' não encontrada no mapeamento")
 
-            # Obter o output para a grandeza
-            output = data_map[data_map['Código'] == grandeza_codigo].iloc[0]
-            logging.debug(f"Output encontrado para {grandeza_codigo}: {output}")
+            # Obter o output para o conjunto
+            output = data_map[data_map['Código'] == conjunto_codigo].iloc[0]
+            logging.debug(f"Output encontrado para {conjunto_codigo}: {output}")
 
-            # Processar o output da grandeza
-            output_df = self.processar_output_grandeza(output, data_map)
+            # Processar o output do conjunto
+            output_df = self.processar_output_conjunto(output, data_map)
 
-            logging.debug("Grandeza gerada com sucesso: %s", output_df.head())
+            logging.debug("Conjunto gerada com sucesso: %s", output_df.head())
             return output_df
 
         except Exception as e:
-            logging.exception("Erro ao gerar grandeza: %s", e)
+            logging.exception("Erro ao gerar conjunto: %s", e)
             raise e
 
-    def processar_output_grandeza(self, output, data_map):
+    def processar_output_conjunto(self, output, data_map):
         try:
             output_cols = eval(output['Output'])
             output_df = pd.DataFrame()
@@ -169,7 +169,7 @@ class DataLoader:
                         if calc_col not in self.dados_filtrados.columns:
                             raise ValueError(f"Coluna '{calc_col}' necessária para o cálculo de '{col}' não encontrada")
 
-                    logging.debug("Grandeza gerada com sucesso: %s", output_df.head())
+                    logging.debug("Conjunto gerada com sucesso: %s", output_df.head())
 
 
                     output_df[col] = self.dados_filtrados[colunas_calculo].sum(axis=1)
@@ -180,28 +180,28 @@ class DataLoader:
             logging.error(f"Erro ao avaliar string de output: {e}")
             raise
         except Exception as e:
-            logging.error(f"Erro ao processar receita da grandeza: {e}")
+            logging.error(f"Erro ao processar receita do conjunto: {e}")
             raise
 
-    def carregar_grandezas(self):
+    def carregar_conjuntos(self):
         # Substitua este caminho pelo caminho correto do seu arquivo CSV
         data_map = pd.read_csv('data_map.csv', delimiter=';')
         return dict(zip(data_map['Nome'], data_map['Código']))
 
-    def mostrar_opcoes_filtro(self, grandeza_codigo, grandeza_def):
+    def mostrar_opcoes_filtro(self, conjunto_codigo, conjunto_def):
         # Gerar chaves únicas para widgets
-        slider_key = f"slider_idade_{grandeza_codigo}_{grandeza_def}"
-        multiselect_sexo_key = f"multiselect_sexo_{grandeza_codigo}_{grandeza_def}"
-        multiselect_instrucao_key = f"multiselect_instrucao_{grandeza_codigo}_{grandeza_def}"
+        slider_key = f"slider_idade_{conjunto_codigo}_{conjunto_def}"
+        multiselect_sexo_key = f"multiselect_sexo_{conjunto_codigo}_{conjunto_def}"
+        multiselect_instrucao_key = f"multiselect_instrucao_{conjunto_codigo}_{conjunto_def}"
 
         # Contar o número de linhas antes da aplicação dos filtros
         self.qtd_dados_iniciais = self.dados_originais.shape[0]
-        chave_qtd_linhas = f'qtd_linhas_iniciais_{grandeza_def}'
+        chave_qtd_linhas = f'qtd_linhas_iniciais_{conjunto_def}'
         st.session_state[chave_qtd_linhas] = self.qtd_dados_iniciais
 
-        # Carregar o mapeamento de grandezas para obter o output
+        # Carregar o mapeamento de conjuntos para obter o output
         data_map = pd.read_csv('data_map.csv', delimiter=';')
-        output_cols = eval(data_map[data_map['Código'] == grandeza_codigo]['Output'].iloc[0])
+        output_cols = eval(data_map[data_map['Código'] == conjunto_codigo]['Output'].iloc[0])
 
         # Inicializar lista de colunas de origem
         colunas_origem = []
@@ -229,7 +229,7 @@ class DataLoader:
         opcoes_unicas_sexo = ['Nulos'] + self.dados_filtrados['SEXO'].dropna().unique().tolist()
         opcoes_unicas_instrucao = ['Nulos'] + self.dados_filtrados['INSTRUCAO'].dropna().unique().tolist()
 
-        if grandeza_def == 'a':
+        if conjunto_def == 'a':
 
             # Opção de filtro por idade
             min_age, max_age = st.slider("Selecione a faixa etária:", 
@@ -254,8 +254,8 @@ class DataLoader:
                                                 key=multiselect_instrucao_key)
             st.session_state['instrucao_selecionada'] = instrucao_selecionada
 
-        elif grandeza_def == 'b':
-            # Comportamento para grandeza_def 'b': apenas exibir os valores dos filtros definidos para 'a'
+        elif conjunto_def == 'b':
+            # Comportamento para o conjunto_def 'b': apenas exibir os valores dos filtros definidos para 'a'
 
             st.markdown("### Filtros aplicados:")
             st.markdown(f"- Faixa etária: {st.session_state['min_age']} até {st.session_state['max_age']}")
@@ -263,7 +263,7 @@ class DataLoader:
             st.markdown(f"- Nível de instrução: {', '.join(st.session_state['instrucao_selecionada'])}")
 
     
-    def atualizar_filtros(self, grandeza_def):
+    def atualizar_filtros(self, conjunto_def):
         
         # Aplicar filtro de idade
         if 'min_age' in st.session_state and 'max_age' in st.session_state:
@@ -300,9 +300,9 @@ class DataLoader:
         qtd_dados_finais = self.dados_filtrados.shape[0]
         qtd_dados_removidos = self.qtd_dados_iniciais - qtd_dados_finais
 
-        # Atualizar o estado da sessão com as contagens, diferenciando entre as grandezas 'a' e 'b'
-        chave_qtd_linhas_finais = f'qtd_linhas_finais_{grandeza_def}'
-        chave_qtd_linhas_removidas = f'qtd_linhas_removidas_{grandeza_def}'
+        # Atualizar o estado da sessão com as contagens, diferenciando entre os conjuntos 'a' e 'b'
+        chave_qtd_linhas_finais = f'qtd_linhas_finais_{conjunto_def}'
+        chave_qtd_linhas_removidas = f'qtd_linhas_removidas_{conjunto_def}'
 
         st.session_state[chave_qtd_linhas_finais] = qtd_dados_finais
         st.session_state[chave_qtd_linhas_removidas] = qtd_dados_removidos
