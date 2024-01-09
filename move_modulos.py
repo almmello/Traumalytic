@@ -6,11 +6,14 @@ def main():
     # Carregar variáveis de ambiente do arquivo .env
     load_dotenv()
 
+    # Definir se inclui a copia do menu
+    incluiMenu = False
+
     # Definir ambiente atual
     ambienteAtual = "Mac"  # Mude para "Mac" caso esteja no Macintosh
 
     # Definindo os caminhos de origem e destino com base no ambiente
-    if ambienteAtual == "Mac":
+    if ambienteAtual == "PC":
         origem = os.getenv("origemMac")
         destino = os.getenv("destinoMac")
     else:
@@ -19,16 +22,18 @@ def main():
     
     dirModulo = "modulos"
 
-    # Verificar e mover o arquivo sidemenu.py, se existir
-    sidemenu_origem = os.path.join(origem, "sidemenu.py")
-    sidemenu_destino = os.path.join(destino, "sidemenu.py")
-    if os.path.exists(sidemenu_origem):
-        if os.path.exists(sidemenu_destino):
-            os.remove(sidemenu_destino)
-        shutil.move(sidemenu_origem, sidemenu_destino)
-        print("Arquivo sidemenu.py movido com sucesso.")
-    else:
-        print("Arquivo sidemenu.py não encontrado na origem.")
+    # Verificar se move o menu
+    if incluiMenu:
+        # Verificar e mover o arquivo sidemenu.py, se existir
+        sidemenu_origem = os.path.join(origem, "sidemenu.py")
+        sidemenu_destino = os.path.join(destino, "sidemenu.py")
+        if os.path.exists(sidemenu_origem):
+            if os.path.exists(sidemenu_destino):
+                os.remove(sidemenu_destino)
+            shutil.move(sidemenu_origem, sidemenu_destino)
+            print("Arquivo sidemenu.py movido com sucesso.")
+        else:
+            print("Arquivo sidemenu.py não encontrado na origem.")
 
     # Verificar se existem pastas na origem
     if any(os.path.isdir(os.path.join(origem, item)) for item in os.listdir(origem)):

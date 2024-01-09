@@ -22,33 +22,4 @@ def mostrar_conteudo():
     """)
 
 
-def explicar_filtro_idade():
-    st.markdown("""
-    ### Filtro de Faixa Etária
-    Selecione a faixa etária dos participantes para focar em um grupo etário específico. Isso permite analisar os dados com base na idade dos respondentes.
-    """)
-
-def explicar_filtro_idade_nulos():
-    st.markdown("""
-    ### Filtro de Idades Nulas
-    Ao marcar esta opção, você remove da análise os registros com idades incompletas ou ausentes nos questionários PTCI e PCL-5.
-    """)
-
-def explicar_filtro_pcti():
-    st.markdown("""
-    ### Filtro de Dados Nulos no PTCI
-    Ao marcar esta opção, você remove da análise os registros com respostas incompletas ou ausentes no questionário PTCI. Isso garante a análise de dados mais completos e confiáveis.
-    """)
-
-def explicar_filtro_pcl5():
-    st.markdown("""
-    ### Filtro de Dados Nulos no PCL-5
-    Similar ao filtro PTCI, esta opção exclui registros com dados incompletos ou ausentes no questionário PCL-5, proporcionando uma análise mais precisa dos sintomas relacionados ao TEPT.
-    """)
-
-def explicar_ponto_de_corte_tept():
-    st.markdown("""
-    ### Ponto de Corte para Diagnóstico de TEPT
-    O ponto de corte é o valor limiar usado para determinar a possível presença de TEPT com base no escore total do PCL-5. Um escore acima desse ponto de corte indica que o número de sintomas relatados pode ser suficiente para um diagnóstico de TEPT, enquanto um escore abaixo sugere que os sintomas não atingem o limiar clínico para o diagnóstico.
-    """)
 

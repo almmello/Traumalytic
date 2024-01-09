@@ -5,6 +5,21 @@ import io
 from cryptography.fernet import Fernet
 from dotenv import load_dotenv
 import configs
+import logging
+
+logging.basicConfig(level=logging.DEBUG)
+
+
+def limpar_e_carregar_csv(caminho_arquivo):
+    try:
+        with open(caminho_arquivo, 'r', encoding='utf-8') as file:
+            conteudo = file.read().replace('\x00', '')
+        logging.debug("Conteúdo do CSV após limpeza: %s", conteudo[:500])  # Mostra os primeiros 500 caracteres
+        return pd.read_csv(io.StringIO(conteudo), delimiter=';', quotechar='"')
+    except Exception as e:
+        logging.exception("Erro ao ler e limpar CSV")
+        raise e
+
 
 class DataLoader:
     def __init__(self):
@@ -26,9 +41,53 @@ class DataLoader:
     def load_filter_vars_from_state(self):
         self.min_age = st.session_state['min_age']
         self.max_age = st.session_state['max_age']
-        self.remover_nulos_idade = st.session_state['remover_nulos_idade']
-        self.remover_nulos_pcti = st.session_state['remover_nulos_pcti']
-        self.remover_nulos_pcl5 = st.session_state['remover_nulos_pcl5']
+
+
+    def reset_state(self):
+        logging.debug("Efetuando reset do estado da sessão")
+        state_vars_to_reset = [
+            'min_age_selecionada',
+            'max_age_selecionada',
+            'sexo_selecionado',
+            'instrucao_selecionada',
+            'data_a',
+            'data_resumo_a',
+            'qtd_linhas_finais_a',
+            'qtd_linhas_iniciais_a',
+            'qtd_linhas_removidas_a',
+            'data_b',
+            'data_resumo_b',
+            'qtd_linhas_finais_b',
+            'qtd_linhas_iniciais_b',
+            'qtd_linhas_removidas_b',            
+        ]
+        for var in state_vars_to_reset:
+            st.session_state[var] = configs.initial_state.get(var, None)
+
+            
+    def debug_log_estado(self):
+        # Verificar se o estado da sessão contém alguma variável
+        if st.session_state:
+            logging.debug("Variáveis de Estado Atuais")
+
+            # Criar uma lista para armazenar os dados das variáveis de estado
+            dados_estado = []
+
+            # Iterar sobre cada variável de estado e adicionar à lista
+            for chave, valor in st.session_state.items():
+                dados_estado.append({"Variável": chave, "Valor": valor})
+
+            # Converter a lista em um DataFrame
+            estado_df = pd.DataFrame(dados_estado)
+
+            # Ordenar o DataFrame pela coluna 'Variável' em ordem alfabética
+            estado_df.sort_values(by='Variável', inplace=True)
+
+            # Imprimir o DataFrame no log de depuração
+            logging.debug(f"DataFrame de estado: \n{estado_df}")
+        else:
+            logging.debug("Não há variáveis de estado definidas atualmente.")
+
 
     def load_data(self):
         try:
@@ -37,79 +96,217 @@ class DataLoader:
                 dados_descriptografados = self.fernet.decrypt(dados_criptografados)
             return pd.read_excel(io.BytesIO(dados_descriptografados))
         except Exception as e:
-            st.error(f"Erro ao carregar dados: {e}")
+            st.error(f"Erro ao load_data: {e}")
             return pd.DataFrame()
-
-    def apply_filter(self, dados):
-        dados_iniciais = dados.shape[0]
-
-        if self.remover_nulos_idade:
-            dados = dados[pd.to_numeric(dados['IDADE'], errors='coerce').notna()]
-
-        if self.min_age is not None and self.max_age is not None:
-            dados = dados[(dados['IDADE'] >= self.min_age) & (dados['IDADE'] <= self.max_age)]
-
-        if self.remover_nulos_pcti:
-            PTCI_COLS = [f'PTCI{i:02d}' for i in range(1, 37)]
-            dados = dados.dropna(subset=PTCI_COLS, how='any')
-
-        if self.remover_nulos_pcl5:
-            PCL5_COLS = [f'PCL{i:02d}' for i in range(1, 21)]
-            dados = dados.dropna(subset=PCL5_COLS, how='any')
-
-        # Agora que todos os filtros foram aplicados, faça a contagem
-        dados_finais = dados.shape[0]
-        dados_missing = dados_iniciais - dados_finais
-
-        # Atualiza o estado da sessão com as contagens finais
-        st.session_state['valid_count'] = dados_finais
-        st.session_state['missing_count'] = dados_missing
-
-
-
-        return dados
 
     def carregar_dados(self):
         try:
+            logging.debug("Iniciando carregar_dados")
             self.load_filter_vars_from_state()
+            logging.debug("Variáveis de filtro carregadas")
+
             dados = self.load_data()
-            dados_filtrados = self.apply_filter(dados)
-            return dados_filtrados if not dados_filtrados.empty else pd.DataFrame(columns=dados.columns)
+            logging.debug("Dados carregados: %s", dados.head())
+
+            self.dados_originais = dados  # Salvar os dados originais para referência
+
         except Exception as e:
+            logging.error("Erro ao carregar dados: %s", e)
             st.error(f"Erro ao carregar dados: {e}")
             return pd.DataFrame()
-        
 
-    def calculos_pcl5(data):
-        # Fórmulas para os clusters do PCL-5
-        clusters_pcl5 = {
-            'PCL5_Cluster_B': ['PCL01', 'PCL02', 'PCL03', 'PCL04', 'PCL05'],
-            'PCL5_Cluster_C': ['PCL06', 'PCL07'],
-            'PCL5_Cluster_D': ['PCL08', 'PCL09', 'PCL10', 'PCL11', 'PCL12', 'PCL13', 'PCL14'],
-            'PCL5_Cluster_E': ['PCL15', 'PCL16', 'PCL17', 'PCL18', 'PCL19', 'PCL20'],
-            'PCL5_Total': ['PCL01', 'PCL02', 'PCL03', 'PCL04', 'PCL05', 'PCL06', 'PCL07', 'PCL08', 'PCL09', 'PCL10', 'PCL11', 'PCL12', 'PCL13', 'PCL14', 'PCL15', 'PCL16', 'PCL17', 'PCL18', 'PCL19', 'PCL20']
-        }
 
-        for cluster, questions in clusters_pcl5.items():
-            data[cluster] = data[questions].sum(axis=1)
-            data[cluster + '_media'] = data[cluster] / len(questions)
 
-        return data
+    def gerar_grandeza(self, grandeza_codigo):
+        try:
+            logging.debug(f"Iniciando a função gerar_grandeza para o código: {grandeza_codigo}")
+
+            # Carregar o mapeamento de grandezas
+            data_map = limpar_e_carregar_csv('data_map.csv')
+            logging.debug("Mapeamento de grandezas carregado com sucesso")
+
+            # Verificar se a grandeza está no mapeamento
+            if grandeza_codigo not in data_map['Código'].values:
+                raise ValueError(f"Grandeza '{grandeza_codigo}' não encontrada no mapeamento")
+
+            # Obter o output para a grandeza
+            output = data_map[data_map['Código'] == grandeza_codigo].iloc[0]
+            logging.debug(f"Output encontrado para {grandeza_codigo}: {output}")
+
+            # Processar o output da grandeza
+            output_df = self.processar_output_grandeza(output, data_map)
+
+            logging.debug("Grandeza gerada com sucesso: %s", output_df.head())
+            return output_df
+
+        except Exception as e:
+            logging.exception("Erro ao gerar grandeza: %s", e)
+            raise e
+
+    def processar_output_grandeza(self, output, data_map):
+        try:
+            output_cols = eval(output['Output'])
+            output_df = pd.DataFrame()
+
+            for col in output_cols:
+                logging.debug(f"Processando coluna: {col}")
+                logging.debug(f"Colunas nos dados filtrados: {self.dados_filtrados.columns.tolist()}")
+
+                if col in self.dados_filtrados.columns:
+                    logging.debug(f"Coluna {col} encontrada nos dados filtrados")
+                    output_df[col] = self.dados_filtrados[col]
+                else:
+
+                    logging.debug(f"Coluna {col} não encontrada nos dados filtrados, buscando receita de cálculo")
+                    linha_calculo = data_map[data_map['Código'] == col.lower()].iloc[0]
+                    logging.debug(f"DataFrame após filtrar data_map: {linha_calculo}")
+
+
+                    colunas_calculo = eval(linha_calculo['Cálculo'])
+                    logging.debug(f"Colunas para cálculo: {colunas_calculo}")
+
+                    for calc_col in colunas_calculo:
+                        if calc_col not in self.dados_filtrados.columns:
+                            raise ValueError(f"Coluna '{calc_col}' necessária para o cálculo de '{col}' não encontrada")
+
+                    logging.debug("Grandeza gerada com sucesso: %s", output_df.head())
+
+
+                    output_df[col] = self.dados_filtrados[colunas_calculo].sum(axis=1)
+
+            return output_df
+
+        except SyntaxError as e:
+            logging.error(f"Erro ao avaliar string de output: {e}")
+            raise
+        except Exception as e:
+            logging.error(f"Erro ao processar receita da grandeza: {e}")
+            raise
+
+    def carregar_grandezas(self):
+        # Substitua este caminho pelo caminho correto do seu arquivo CSV
+        data_map = pd.read_csv('data_map.csv', delimiter=';')
+        return dict(zip(data_map['Nome'], data_map['Código']))
+
+    def mostrar_opcoes_filtro(self, grandeza_codigo, grandeza_def):
+        # Gerar chaves únicas para widgets
+        slider_key = f"slider_idade_{grandeza_codigo}_{grandeza_def}"
+        multiselect_sexo_key = f"multiselect_sexo_{grandeza_codigo}_{grandeza_def}"
+        multiselect_instrucao_key = f"multiselect_instrucao_{grandeza_codigo}_{grandeza_def}"
+
+        # Contar o número de linhas antes da aplicação dos filtros
+        self.qtd_dados_iniciais = self.dados_originais.shape[0]
+        chave_qtd_linhas = f'qtd_linhas_iniciais_{grandeza_def}'
+        st.session_state[chave_qtd_linhas] = self.qtd_dados_iniciais
+
+        # Carregar o mapeamento de grandezas para obter o output
+        data_map = pd.read_csv('data_map.csv', delimiter=';')
+        output_cols = eval(data_map[data_map['Código'] == grandeza_codigo]['Output'].iloc[0])
+
+        # Inicializar lista de colunas de origem
+        colunas_origem = []
+
+        # Identificar as colunas de origem
+        for col in output_cols:
+            if col in self.dados_originais.columns:
+                colunas_origem.append(col)
+            else:
+                # Para colunas calculadas, buscar a receita de cálculo e adicionar as colunas de origem
+                receita_calculo = data_map[data_map['Código'] == col.lower()].iloc[0]
+                colunas_calculo = eval(receita_calculo['Cálculo'])
+                colunas_origem.extend(colunas_calculo)
+
+        # Remover duplicatas na lista de colunas de origem
+        colunas_origem = list(set(colunas_origem))
+
+        # Filtra os dados para remover nulos nas colunas relevantes
+        self.dados_filtrados = self.dados_originais.dropna(subset=colunas_origem)
+
+        # Opçãos de filtro
+        minimo_encontrado = self.dados_filtrados['IDADE'].min()
+        maximo_encontrado = self.dados_filtrados['IDADE'].max()
+
+        opcoes_unicas_sexo = ['Nulos'] + self.dados_filtrados['SEXO'].dropna().unique().tolist()
+        opcoes_unicas_instrucao = ['Nulos'] + self.dados_filtrados['INSTRUCAO'].dropna().unique().tolist()
+
+        if grandeza_def == 'a':
+
+            # Opção de filtro por idade
+            min_age, max_age = st.slider("Selecione a faixa etária:", 
+                                        float(minimo_encontrado), 
+                                        float(maximo_encontrado), 
+                                        (float(st.session_state['min_age']), float(st.session_state['max_age'])), 
+                                        1.0, key=slider_key)
+            st.session_state['min_age_selecionada'] = min_age
+            st.session_state['max_age_selecionada'] = max_age
+
+            # Opção de filtro por sexo com multiselect
+            sexo_selecionado = st.multiselect("Selecione as opções de sexo", 
+                                            opcoes_unicas_sexo, 
+                                            default=opcoes_unicas_sexo, 
+                                            key=multiselect_sexo_key)
+            st.session_state['sexo_selecionado'] = sexo_selecionado
+
+            # Filtro de instrução com multiselect
+            instrucao_selecionada = st.multiselect("Selecione os níveis de instrução", 
+                                                opcoes_unicas_instrucao, 
+                                                default=opcoes_unicas_instrucao, 
+                                                key=multiselect_instrucao_key)
+            st.session_state['instrucao_selecionada'] = instrucao_selecionada
+
+        elif grandeza_def == 'b':
+            # Comportamento para grandeza_def 'b': apenas exibir os valores dos filtros definidos para 'a'
+
+            st.markdown("### Filtros aplicados:")
+            st.markdown(f"- Faixa etária: {st.session_state['min_age']} até {st.session_state['max_age']}")
+            st.markdown(f"- Sexo: {', '.join(st.session_state['sexo_selecionado'])}")
+            st.markdown(f"- Nível de instrução: {', '.join(st.session_state['instrucao_selecionada'])}")
+
     
-    def calculos_ptci(data):
-        # Fórmulas para os clusters do PTCI
-        clusters_ptci = {
-            'PTCI_Cluster_A': ['PTCI02', 'PTCI03', 'PTCI04', 'PTCI05', 'PTCI06', 'PTCI09', 'PTCI12', 'PTCI14', 'PTCI16', 'PTCI17', 
-                        'PTCI20', 'PTCI21', 'PTCI24', 'PTCI25', 'PTCI26', 'PTCI28', 'PTCI29', 'PTCI30', 'PTCI33', 'PTCI35', 'PTCI36'],
-            'PTCI_Cluster_B': ['PTCI07', 'PTCI08', 'PTCI10', 'PTCI11', 'PTCI18', 'PTCI23', 'PTCI27'],
-            'PTCI_Cluster_C': ['PTCI01', 'PTCI15', 'PTCI19', 'PTCI22', 'PTCI31'],
-            'PTCI_Total': ['PTCI01', 'PTCI02', 'PTCI03', 'PTCI04', 'PTCI05', 'PTCI06', 'PTCI07', 'PTCI08', 'PTCI09', 'PTCI10', 'PTCI11', 'PTCI12', 'PTCI14', 'PTCI15', 'PTCI16', 'PTCI17', 'PTCI18', 'PTCI19', 'PTCI20', 'PTCI21', 'PTCI22', 'PTCI23', 'PTCI24', 'PTCI25', 'PTCI26', 'PTCI27', 'PTCI28', 'PTCI29', 'PTCI30', 'PTCI31', 'PTCI33', 'PTCI35', 'PTCI36']
-        }
-
-        # Calcula a soma e média para cada cluster
-        for cluster, questions in clusters_ptci.items():
-            data[cluster] = data[questions].sum(axis=1)
-            data[cluster + '_media'] = data[cluster] / len(questions)
+    def atualizar_filtros(self, grandeza_def):
         
-        return data
+        # Aplicar filtro de idade
+        if 'min_age' in st.session_state and 'max_age' in st.session_state:
+            self.dados_filtrados = self.dados_filtrados[
+                (self.dados_filtrados['IDADE'] >= st.session_state['min_age_selecionada']) &
+                (self.dados_filtrados['IDADE'] <= st.session_state['max_age_selecionada'])
+            ]
+
+        # Aplicar filtro de sexo
+        if 'sexo_selecionado' in st.session_state:
+            opcoes_sexo = st.session_state['sexo_selecionado']
+            if 'Nulos' in opcoes_sexo:
+                self.dados_filtrados = self.dados_filtrados[
+                    self.dados_filtrados['SEXO'].fillna('Nulos').isin(opcoes_sexo)
+                ]
+            elif opcoes_sexo:
+                self.dados_filtrados = self.dados_filtrados[
+                    self.dados_filtrados['SEXO'].isin(opcoes_sexo)
+                ]
+
+        # Aplicar filtro de instrução
+        if 'instrucao_selecionada' in st.session_state:
+            opcoes_instrucao = st.session_state['instrucao_selecionada']
+            if 'Nulos' in opcoes_instrucao:
+                self.dados_filtrados = self.dados_filtrados[
+                    self.dados_filtrados['INSTRUCAO'].fillna('Nulos').isin(opcoes_instrucao)
+                ]
+            elif opcoes_instrucao:
+                self.dados_filtrados = self.dados_filtrados[
+                    self.dados_filtrados['INSTRUCAO'].isin(opcoes_instrucao)
+                ]
+
+        # Contar o número de linhas após a aplicação dos filtros
+        qtd_dados_finais = self.dados_filtrados.shape[0]
+        qtd_dados_removidos = self.qtd_dados_iniciais - qtd_dados_finais
+
+        # Atualizar o estado da sessão com as contagens, diferenciando entre as grandezas 'a' e 'b'
+        chave_qtd_linhas_finais = f'qtd_linhas_finais_{grandeza_def}'
+        chave_qtd_linhas_removidas = f'qtd_linhas_removidas_{grandeza_def}'
+
+        st.session_state[chave_qtd_linhas_finais] = qtd_dados_finais
+        st.session_state[chave_qtd_linhas_removidas] = qtd_dados_removidos
+
+
+
 
