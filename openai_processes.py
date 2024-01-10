@@ -6,7 +6,7 @@ import streamlit as st
 import os
 
 
-def carregar_conclusoes(analysis_id, nome_analise, resultados=None, instrucoes=None):
+def carregar_conclusoes(analysis_id, etapa_analise, nome_analise, resultados=None, instrucoes=None):
 
     supabase_manager = SupabaseManager()
     existing_conclusions = supabase_manager.recuperar_conclusoes(analysis_id)
@@ -17,8 +17,8 @@ def carregar_conclusoes(analysis_id, nome_analise, resultados=None, instrucoes=N
     # Verificar se existem conclusões anteriores
     if not existing_conclusions:
         # Gerar e inserir a primeira conclusão se não existir
-        nova_conclusao = gerar_conclusao(analysis_id, instrucoes, resultados)
-        st.subheader('Nova Conclusão: ' + nome_analise)
+        nova_conclusao = gerar_conclusao(analysis_id, etapa_analise, instrucoes, resultados)
+        st.subheader(f"Nova Conclusão: {nome_analise}")
         st.markdown(nova_conclusao)
     else:
         # Exibir o histórico de chat existente
@@ -41,32 +41,32 @@ def carregar_conclusoes(analysis_id, nome_analise, resultados=None, instrucoes=N
     # Caixa de texto e botão para comentários
     comentario = st.text_area("Faça comentários sobre a conclusão de forma que possa ser atualizada:", key=f"comment_{st.session_state['reset_counter']}")
     if st.button('Enviar Comentário'):
-        gerar_nova_conclusao(analysis_id, comentario, resultados=None, instrucoes=None)
+        gerar_nova_conclusao(analysis_id, etapa_analise, comentario, resultados=None, instrucoes=None)
         st.session_state['reset_counter'] += 1
 
         st.rerun()
 
-def gravar_resultados(analysis_id, resultados_texto):
+def gravar_resultados(analysis_id, etapa_analise, resultados_texto):
     supabase_manager = SupabaseManager()
-    resultado = supabase_manager.inserir_conclusao(analysis_id,'resultado', resultados_texto, 'ativa')
+    resultado = supabase_manager.inserir_conclusao(analysis_id, etapa_analise, 'resultado', resultados_texto, 'ativa')
     # Verificar se a operação foi bem-sucedida
     if resultado:
         return True
     else:
         return False
 
-def gerar_conclusao(analysis_id, instrucoes, resultados):
+def gerar_conclusao(analysis_id, etapa_analise, instrucoes, resultados):
     openai_interface = OpenAIInterface()
 
     response = openai_interface.criar_conclusao(instrucoes, resultados)
-    texto_conclusao = response.content  # Acesso correto ao conteúdo
+    texto_conclusao = response.content
 
     supabase_manager = SupabaseManager()
-    supabase_manager.inserir_conclusao(analysis_id, 'resposta', texto_conclusao, 'ativa')
+    supabase_manager.inserir_conclusao(analysis_id, etapa_analise, 'resposta', texto_conclusao, 'ativa')
 
     return texto_conclusao
 
-def gerar_nova_conclusao(analysis_id, comentario, resultados=None, instrucoes=None):
+def gerar_nova_conclusao(analysis_id, etapa_analise, comentario, resultados=None, instrucoes=None):
     debug = True  # Defina como False para desativar os logs de depuração
     supabase_manager = SupabaseManager()
     openai_interface = OpenAIInterface()
@@ -86,11 +86,11 @@ def gerar_nova_conclusao(analysis_id, comentario, resultados=None, instrucoes=No
         print("\nResposta da OpenAI recebida:", updated_conclusion, "\n")
 
     # Inserir o novo comentário e a conclusão atualizada no banco de dados
-    supabase_manager.inserir_conclusao(analysis_id, 'comentario', comentario, 'ativa')
+    supabase_manager.inserir_conclusao(analysis_id, etapa_analise, 'comentario', comentario, 'ativa')
     if debug:
         print("\nNovo comentário inserido no banco de dados para a análise ID:", analysis_id, "\n")
 
-    supabase_manager.inserir_conclusao(analysis_id, 'resposta', updated_conclusion, 'ativa')
+    supabase_manager.inserir_conclusao(analysis_id, etapa_analise, 'resposta', updated_conclusion, 'ativa')
     if debug:
         print("\nConclusão atualizada inserida no banco de dados para a análise ID:", analysis_id, "\n")
 
@@ -112,7 +112,7 @@ def processar_visao_imagem(figura, prompt_text):
 
     return descricao
 
-def processar_conclusoes_imagem(analysis_id, fig, prompt_plot, nome_analise, instrucoes, debug):
+def processar_conclusoes_imagem(analysis_id, etapa_analise, fig, prompt_plot, nome_analise, instrucoes, debug):
     supabase_manager = SupabaseManager()
     existing_conclusions = supabase_manager.recuperar_conclusoes(analysis_id)
 
@@ -123,7 +123,7 @@ def processar_conclusoes_imagem(analysis_id, fig, prompt_plot, nome_analise, ins
         if debug:
             print("\nTexto para Geração de Conclusões: ", resultados, "\n")
 
-        gravacao_bem_sucedida = gravar_resultados(analysis_id, resultados)
+        gravacao_bem_sucedida = gravar_resultados(analysis_id, etapa_analise, resultados)
 
         if debug:
             print("\nRetorno Gravação: ", gravacao_bem_sucedida, "\n")
@@ -176,7 +176,7 @@ def formatar_resultados_para_texto(tabela_resultados):
     return texto
 
 
-def processar_conclusoes_texto(analysis_id, texto_resultados, nome_analise, instrucoes, debug):
+def processar_conclusoes_texto(analysis_id, etapa_analise, texto_resultados, nome_analise, instrucoes, debug):
     supabase_manager = SupabaseManager()
     existing_conclusions = supabase_manager.recuperar_conclusoes(analysis_id)
 
@@ -188,13 +188,13 @@ def processar_conclusoes_texto(analysis_id, texto_resultados, nome_analise, inst
             print("\nTexto para Geração de Conclusões: ", resultados, "\n")
 
         # Gravar os resultados formatados
-        gravacao_bem_sucedida = gravar_resultados(analysis_id, resultados)
+        gravacao_bem_sucedida = gravar_resultados(analysis_id, etapa_analise, resultados)
 
         if debug:
             print("\nRetorno Gravação: ", gravacao_bem_sucedida, "\n")
 
         if gravacao_bem_sucedida:
-            carregar_conclusoes(analysis_id, nome_analise, resultados, instrucoes)
+            carregar_conclusoes(analysis_id, etapa_analise, nome_analise, resultados, instrucoes)
 
     else:
         # Carregar conclusões existentes sem gerar novas descrições

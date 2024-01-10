@@ -11,11 +11,13 @@ initial_state = {
     'max_age_selecionada': 0,
     'sexo_selecionado' : 'Todos',
     'instrucao_selecionada' : 'Todos',
+    'cod_a'
     'data_a': [],
     'data_resumo_a': [],
     'qtd_linhas_iniciais_a' : 0,
     'qtd_linhas_finais_a' : 0,
     'qtd_linhas_removidas_a' : 0,
+    'cod_b'
     'data_b': [],
     'data_resumo_b': [],
     'qtd_linhas_iniciais_b' : 0,

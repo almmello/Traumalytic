@@ -9,14 +9,23 @@ class SupabaseManager:
         key = os.getenv('SUPABASE_KEY')
         self.supabase: Client = create_client(url, key)
 
-    def inserir_conclusao(self, analysis_id, conclusion_type, conclusion, status):
+    def inserir_conclusao(self, analysis_id, etapa_analise, conclusion_type, conclusion, status):
         APP_USER = os.getenv("ENV_USER")
+
+        # Converte 'etapa_analise' para um inteiro
+        try:
+            etapa_analise_int = int(etapa_analise)
+        except ValueError:
+            # Aqui você pode lidar com a situação em que 'etapa_analise' não é um número válido
+            # Por exemplo, registrar um erro ou definir um valor padrão
+            etapa_analise_int = 0  # ou qualquer valor padrão adequado
         data = {
             "user_id": APP_USER,
             "analysis_id": analysis_id,
             "type": conclusion_type,
             "conclusion": conclusion,
-            "status": status
+            "status": status, 
+            "etapa": etapa_analise_int
         }
         return self.supabase.table("conclusions").insert(data).execute()
 

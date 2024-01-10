@@ -10,10 +10,11 @@ class OpenAIInterface:
         self.api_key = os.getenv('OPENAI_API_KEY')
         self.model =  "gpt-4-1106-preview"  # "gpt-3.5-turbo"  # ou "gpt-4-1106-preview" conforme a necessidade
         self.vision_model = "gpt-4-vision-preview"  # Modelo para visão
-        self.max_tokens = 4000  # Valor padrão, ajuste conforme necessário (máximo = 4000)
+        self.max_tokens = 1000  # Valor padrão, ajuste conforme necessário (máximo = 4000)
         self.system_message_content = "Você é um assistente analítico especializado em dados de trauma e TEPT. Forneça insights e gere conclusões que possam auxiliar na compreensão do impacto do trauma nos indivíduos."
         openai.api_key = self.api_key
         self.client = openai.OpenAI()  # Criando um cliente da biblioteca openai
+
 
 
     def criar_conclusao(self, instrucoes, resultados, comentario=None, historico_conclusoes=None):

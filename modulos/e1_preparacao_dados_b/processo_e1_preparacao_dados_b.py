@@ -57,4 +57,8 @@ def processar_e1_preparacao_dados_b():
             # Guardar o DataFrame do conjunto no estado da sessão para o conjunto
             st.session_state[f'data_{conjunto_def}'] = dados_filtrados
 
+            # Guardar o Código do conjunto no estado da sessão
+            st.session_state[f'cod_{conjunto_def}'] = conjunto_selecionada_codigo
+
+
     data_loader.debug_log_estado()
