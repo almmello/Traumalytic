@@ -39,8 +39,8 @@ def carregar_conclusoes(analysis_id, etapa_analise, nome_analise, resultados=Non
             contador += 1
 
     # Caixa de texto e botão para comentários
-    comentario = st.text_area("Faça comentários sobre a conclusão de forma que possa ser atualizada:", key=f"comment_{st.session_state['reset_counter']}")
-    if st.button('Enviar Comentário'):
+    comentario = st.text_area("Faça comentários sobre a conclusão de forma que possa ser atualizada:", key=f"comment_{analysis_id}_{st.session_state['reset_counter']}")
+    if st.button('Enviar Comentário', key=f"send_comment_{analysis_id}_{st.session_state['reset_counter']}"):
         gerar_nova_conclusao(analysis_id, etapa_analise, comentario, resultados=None, instrucoes=None)
         st.session_state['reset_counter'] += 1
 

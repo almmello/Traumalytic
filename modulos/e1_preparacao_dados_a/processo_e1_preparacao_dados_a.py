@@ -35,7 +35,7 @@ def processar_e1_preparacao_dados_a():
     conjuntos_nomes = list(conjuntos_dict.keys())
 
     # Escolha do conjunto
-    selectbox_key = f"select_conjunto_{conjunto_def}"
+    selectbox_key = f"select_conjunto_{analysis_id}_{conjunto_def}"
     conjunto_selecionada_nome = st.selectbox("Selecione um Conjunto", [''] + conjuntos_nomes, key=selectbox_key)
 
     if conjunto_selecionada_nome:
@@ -45,7 +45,7 @@ def processar_e1_preparacao_dados_a():
         data_loader.mostrar_opcoes_filtro(conjunto_selecionada_codigo, conjunto_def)	
 
         # Aplicar filtro e carregar dados
-        button_key = f"btn_aplicar_filtro_{conjunto_def}"
+        button_key = f"btn_aplicar_filtro_{analysis_id}_{conjunto_def}"
         if st.button('Aplicar Filtro', key=button_key):
             # Atualizar as variáveis de filtro
             data_loader.atualizar_filtros(conjunto_def)
