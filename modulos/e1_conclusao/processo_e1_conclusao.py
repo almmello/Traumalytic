@@ -5,18 +5,21 @@ from data_loader import DataLoader
 from supabase_manager import SupabaseManager
 
 from openai_processes import (
+    processar_resultados,
     processar_conclusoes_texto,
     formatar_resultados_para_texto,
 )
 
 from modulos.e1_conclusao.conteudo_e1_conclusao import (
+    descricao_analise,
     pref_analysis_id,
     nome_analise,
     instrucoes,
     etapa_analise,
 )
 
-
+def explicar_e1_conclusao():
+    st.markdown(descricao_analise)
 
 def processar_e1_conclusao():
     debug = True  # Defina como False para desativar os logs de depuração
@@ -40,15 +43,22 @@ def processar_e1_conclusao():
 
     # Trasnformar as tabelas dos conjuntos de dados A e B (data_a e data_b) e também dos resumos (data_resumo_a	data_resumo_b) em um texto para o prompt
     data_a = st.session_state['data_a']
-    data_b = st.session_state['data_b']
     data_resumo_a = st.session_state['data_resumo_a']
-    data_resumo_b = st.session_state['data_resumo_b']
     data_a_texto = formatar_resultados_para_texto(data_a)
-    data_b_texto = formatar_resultados_para_texto(data_b)
     data_resumo_a_texto = formatar_resultados_para_texto(data_resumo_a)
+
+    data_b = st.session_state['data_b']
+    data_resumo_b = st.session_state['data_resumo_b']
+    data_b_texto = formatar_resultados_para_texto(data_b)
     data_resumo_b_texto = formatar_resultados_para_texto(data_resumo_b)
 
     texto_resultados = f"Conjunto A:\n{data_a_texto}\nConjunto B:\n{data_b_texto}\nContagem de linhas do Conjunto A:\n{data_resumo_a_texto}\nContagem de linhas do Conjunto B:\n{data_resumo_b_texto}"
+    
+    # Salvar o texto dos resultados em um estado da sessão
+    st.session_state['resultados_calculados'] = texto_resultados
+
+    st.write('Resultados da Etapa 1')
+    processar_resultados(analysis_id, debug)
 
     st.write('Conclusão Etapa 1')
 

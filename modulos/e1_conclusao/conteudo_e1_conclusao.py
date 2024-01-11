@@ -1,7 +1,6 @@
 import streamlit as st
 
-def explicar_e1_conclusao():
-    st.markdown("""
+descricao_analise = """
     ### Conclusão da Etapa 1: Preparação dos Dados
     A Etapa 1 foca na preparação e limpeza dos dados para análise, estabelecendo uma base sólida para as análises subsequentes. Este módulo revisa as escolhas feitas para os conjuntos de dados A e B e avalia a adequação dessas escolhas para as análises estatísticas planejadas na Etapa 2.
 
@@ -11,7 +10,7 @@ def explicar_e1_conclusao():
     - Recomendações para otimizar as análises na Etapa 2, com base nas características dos dados preparados.
     
     A análise realizada aqui é crucial para assegurar que os dados estão prontos para análises mais complexas, incluindo descritivas, de normalidade e inferenciais, e para orientar a escolha dos métodos estatísticos mais adequados nas próximas etapas.
-    """)
+    """
 
 pref_analysis_id = 'e1_conclusao'
 nome_analise = 'Conclusão Etapa 1'

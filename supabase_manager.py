@@ -35,14 +35,28 @@ class SupabaseManager:
         # Assuming the response contains a 'data' attribute with the actual results
         return response.data if response else []
     
-    def recuperar_resultados(self, analysis_id):
-        APP_USER = os.getenv("ENV_USER")  # Get the system user from environment variable
-        response = self.supabase.table("conclusions").select("*").eq("analysis_id", analysis_id).eq("user_id", APP_USER).eq("type",'resultado').execute()
-        # Assuming the response contains a 'data' attribute with the actual results
-        return response.data if response else []
-
     def atualizar_conclusao(self, id, updated_data):
         return self.supabase.table("conclusions").update(updated_data).eq("id", id).execute()
 
     def apagar_conclusao(self, id):
         return self.supabase.table("conclusions").delete().eq("id", id).execute()
+    
+    def recuperar_resultado(self, analysis_id):
+        APP_USER = os.getenv("ENV_USER")  # Get the system user from environment variable
+        response = self.supabase.table("conclusions").select("*").eq("analysis_id", analysis_id).eq("user_id", APP_USER).eq("type",'resultado').execute()
+
+        if response and 'data' in response and isinstance(response['data'], list):
+            # Extrair o campo 'conclusion' de cada item na lista
+            resultados = [item.get('conclusion', '') for item in response['data'] if 'conclusion' in item]
+            return resultados
+        else:
+            return []
+
+    def atualizar_resultado(self, analysis_id, novo_resultado):
+        # Filtrar para obter apenas a ocorrência de resultado
+        existing_data = self.supabase.table("conclusions").select("*").eq("analysis_id", analysis_id).eq("type", "resultado").execute()
+
+        if existing_data.data:
+            id_conclusao = existing_data.data[0]['id']
+            updated_data = {"conclusion": novo_resultado}
+            return self.supabase.table("conclusions").update(updated_data).eq("id", id_conclusao).execute()

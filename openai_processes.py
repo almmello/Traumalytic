@@ -132,7 +132,7 @@ def processar_conclusoes_imagem(analysis_id, etapa_analise, fig, prompt_plot, no
             carregar_conclusoes(analysis_id, nome_analise, resultados, instrucoes)
 
     else:
-        resultados = supabase_manager.recuperar_resultados(analysis_id)
+        resultados = supabase_manager.recuperar_conclusoes(analysis_id)
         
         if resultados:
             carregar_conclusoes(analysis_id, nome_analise, resultados, instrucoes)
@@ -162,7 +162,7 @@ def processar_conclusoes_tabela(analysis_id, tabela_resultados, nome_analise, in
 
     else:
         # Carregar conclusões existentes sem gerar novas descrições
-        resultados = supabase_manager.recuperar_resultados(analysis_id)
+        resultados = supabase_manager.recuperar_conclusoes(analysis_id)
 
         if resultados:
             carregar_conclusoes(analysis_id, nome_analise, resultados, instrucoes)
@@ -198,9 +198,34 @@ def processar_conclusoes_texto(analysis_id, etapa_analise, texto_resultados, nom
 
     else:
         # Carregar conclusões existentes sem gerar novas descrições
-        resultados = supabase_manager.recuperar_resultados(analysis_id)
+        resultados = supabase_manager.recuperar_conclusoes(analysis_id)
 
         if resultados:
             carregar_conclusoes(analysis_id, nome_analise, resultados, instrucoes)
 
 
+def processar_resultados(analysis_id, debug):
+    supabase_manager = SupabaseManager()
+    resultados = supabase_manager.recuperar_resultado(analysis_id)
+
+    if resultados:
+        # Exibir resultados em um bloco de texto grande
+        resultado_atual = st.text_area("Resultados", resultados, key=f"resultados_{analysis_id}")
+
+        # Botão para atualizar resultados
+        if st.button("Atualizar Resultados", key=f"atualizar_{analysis_id}"):
+            supabase_manager.atualizar_resultado(analysis_id, resultado_atual)
+            st.rerun()
+
+    else:
+        # Não existem resultados no Supabase, então exibir os resultados das variáveis de estado
+        if 'resultados_calculados' in st.session_state:
+            resultado_atual = st.text_area("Resultados", st.session_state['resultados_calculados'], key=f"resultados_{analysis_id}")
+
+            # Botão para atualizar resultados
+            if st.button("Atualizar Resultados", key=f"atualizar_{analysis_id}"):
+                supabase_manager.atualizar_resultado(analysis_id, resultado_atual)
+                st.rerun()
+
+
+    
