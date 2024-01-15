@@ -8,21 +8,22 @@ from openai_processes import (
     processar_resultados,
     processar_conclusoes_texto,
     formatar_resultados_para_texto,
+    processar_resumo,
 )
 
 from modulos.e1_conclusao.conteudo_e1_conclusao import (
     descricao_analise,
     pref_analysis_id,
     nome_analise,
-    instrucoes,
     etapa_analise,
+    instrucoes,
 )
 
 def explicar_e1_conclusao():
     st.markdown(descricao_analise)
 
 def processar_e1_conclusao():
-    debug = True  # Defina como False para desativar os logs de depuração
+
     APP_USER = os.getenv("ENV_USER")
 
     # Inicializar reset_counter, no estado da sessão, se não existir. 
@@ -57,10 +58,12 @@ def processar_e1_conclusao():
     # Salvar o texto dos resultados em um estado da sessão
     st.session_state['resultados_calculados'] = texto_resultados
 
-    st.write('Resultados da Etapa 1')
-    processar_resultados(analysis_id, debug)
+    st.write(f'Resultados da Etapa {etapa_analise}')
+    processar_resultados(analysis_id)
 
-    st.write('Conclusão Etapa 1')
+    st.write(f'Conclusão Etapa {etapa_analise}')
+    processar_conclusoes_texto(analysis_id, etapa_analise, texto_resultados, nome_analise, instrucoes)
 
-    # Passando o texto concatenado para o método carregar_conclusoes
-    processar_conclusoes_texto(analysis_id, etapa_analise, texto_resultados, nome_analise, instrucoes, debug)
+    #Chamando o processo para carregar os resumos das conclusões.
+    st.write(f'Resumo Etapa {etapa_analise}')
+    processar_resumo(analysis_id, etapa_analise, nome_analise)

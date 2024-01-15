@@ -8,7 +8,7 @@ load_dotenv()
 class OpenAIInterface:
     def __init__(self):
         self.api_key = os.getenv('OPENAI_API_KEY')
-        self.model =  "gpt-4-1106-preview"  # "gpt-3.5-turbo"  # ou "gpt-4-1106-preview" conforme a necessidade
+        self.model =  "gpt-3.5-turbo-1106"  # "gpt-3.5-turbo"; "gpt-3.5-turbo-1106"; "gpt-4-1106-preview"
         self.vision_model = "gpt-4-vision-preview"  # Modelo para visão
         self.max_tokens = 1000  # Valor padrão, ajuste conforme necessário (máximo = 4000)
         self.system_message_content = "Você é um assistente analítico especializado em dados de trauma e TEPT. Forneça insights e gere conclusões que possam auxiliar na compreensão do impacto do trauma nos indivíduos."
@@ -68,3 +68,39 @@ class OpenAIInterface:
             max_tokens=self.max_tokens
         )
         return response.choices[0].message.content
+    
+    def criar_resumo(self, nome_analise, resultado, historico_conclusoes):
+        # Instrução específica para a geração do resumo
+        system_prompt_resumo = "Você é um especialista em análise de dados para os formulários PCL5 e PTCI."
+
+        instrucao_resumo = (f"Analisando os resultados obtidos nesta análise, resuma a {nome_analise} de forma objetiva, incluindo os principais pontos do resultado: {resultado} e considere as conclusões e comentários fornecidos nesta mensagem.")
+
+        # Construção das mensagens
+        messages = [
+            {"role": "system", "content": system_prompt_resumo},
+            {"role": "user", "content": instrucao_resumo}
+        ]
+        
+        # Adicionar cada entrada do histórico de conclusões ao histórico de mensagens
+        if historico_conclusoes:
+            for conclusao in historico_conclusoes:
+                if conclusao['type'] == 'resposta':
+                    role = "system"
+                    messages.append({"role": role, "content": conclusao['conclusion']})
+                elif conclusao['type'] == 'comentario':
+                    role = "user"
+                    messages.append({"role": role, "content": conclusao['conclusion']})
+
+        # Chamada à API OpenAI para processar as mensagens e gerar um resumo
+        response = self.client.chat.completions.create(
+            model=self.model,
+            messages=messages,
+            max_tokens=self.max_tokens,
+        )
+
+        # Retornar o resumo gerado pelo modelo
+        return response.choices[0].message.content if response.choices else "Não foi possível gerar o resumo."
+
+        
+
+

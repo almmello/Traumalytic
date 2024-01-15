@@ -7,14 +7,14 @@ from dotenv import load_dotenv
 import configs
 import logging
 
-logging.basicConfig(level=logging.DEBUG)
-
+# Obter um logger para o módulo atual
+logger = logging.getLogger(__name__)
 
 def limpar_e_carregar_csv(caminho_arquivo):
     try:
         with open(caminho_arquivo, 'r', encoding='utf-8') as file:
             conteudo = file.read().replace('\x00', '')
-        logging.debug("Conteúdo do CSV após limpeza: %s", conteudo[:500])  # Mostra os primeiros 500 caracteres
+        logger.debug("Conteúdo do CSV após limpeza: %s", conteudo[:500])  # Mostra os primeiros 500 caracteres
         return pd.read_csv(io.StringIO(conteudo), delimiter=';', quotechar='"')
     except Exception as e:
         logging.exception("Erro ao ler e limpar CSV")
@@ -44,7 +44,7 @@ class DataLoader:
 
 
     def reset_state(self):
-        logging.debug("Efetuando reset do estado da sessão")
+        logger.debug("Efetuando reset do estado da sessão")
         state_vars_to_reset = [
             'min_age_selecionada',
             'max_age_selecionada',
@@ -70,7 +70,7 @@ class DataLoader:
     def debug_log_estado(self):
         # Verificar se o estado da sessão contém alguma variável
         if st.session_state:
-            logging.debug("Variáveis de Estado Atuais")
+            logger.debug("Variáveis de Estado Atuais")
 
             # Criar uma lista para armazenar os dados das variáveis de estado
             dados_estado = []
@@ -86,9 +86,9 @@ class DataLoader:
             estado_df.sort_values(by='Variável', inplace=True)
 
             # Imprimir o DataFrame no log de depuração
-            logging.debug(f"DataFrame de estado: \n{estado_df}")
+            logger.debug(f"DataFrame de estado: \n{estado_df}")
         else:
-            logging.debug("Não há variáveis de estado definidas atualmente.")
+            logger.debug("Não há variáveis de estado definidas atualmente.")
 
 
     def load_data(self):
@@ -103,12 +103,12 @@ class DataLoader:
 
     def carregar_dados(self):
         try:
-            logging.debug("Iniciando carregar_dados")
+            logger.debug("Iniciando carregar_dados")
             self.load_filter_vars_from_state()
-            logging.debug("Variáveis de filtro carregadas")
+            logger.debug("Variáveis de filtro carregadas")
 
             dados = self.load_data()
-            logging.debug("Dados carregados: %s", dados.head())
+            logger.debug("Dados carregados: %s", dados.head())
 
             self.dados_originais = dados  # Salvar os dados originais para referência
 
@@ -121,11 +121,11 @@ class DataLoader:
 
     def gerar_conjunto(self, conjunto_codigo):
         try:
-            logging.debug(f"Iniciando a função gerar_conjunto para o código: {conjunto_codigo}")
+            logger.debug(f"Iniciando a função gerar_conjunto para o código: {conjunto_codigo}")
 
             # Carregar o mapeamento de conjuntos
             data_map = limpar_e_carregar_csv('data_map.csv')
-            logging.debug("Mapeamento de conjuntos carregado com sucesso")
+            logger.debug("Mapeamento de conjuntos carregado com sucesso")
 
             # Verificar se o conjunto está no mapeamento
             if conjunto_codigo not in data_map['Código'].values:
@@ -133,12 +133,12 @@ class DataLoader:
 
             # Obter o output para o conjunto
             output = data_map[data_map['Código'] == conjunto_codigo].iloc[0]
-            logging.debug(f"Output encontrado para {conjunto_codigo}: {output}")
+            logger.debug(f"Output encontrado para {conjunto_codigo}: {output}")
 
             # Processar o output do conjunto
             output_df = self.processar_output_conjunto(output, data_map)
 
-            logging.debug("Conjunto gerada com sucesso: %s", output_df.head())
+            logger.debug("Conjunto gerada com sucesso: %s", output_df.head())
             return output_df
 
         except Exception as e:
@@ -151,27 +151,27 @@ class DataLoader:
             output_df = pd.DataFrame()
 
             for col in output_cols:
-                logging.debug(f"Processando coluna: {col}")
-                logging.debug(f"Colunas nos dados filtrados: {self.dados_filtrados.columns.tolist()}")
+                logger.debug(f"Processando coluna: {col}")
+                logger.debug(f"Colunas nos dados filtrados: {self.dados_filtrados.columns.tolist()}")
 
                 if col in self.dados_filtrados.columns:
-                    logging.debug(f"Coluna {col} encontrada nos dados filtrados")
+                    logger.debug(f"Coluna {col} encontrada nos dados filtrados")
                     output_df[col] = self.dados_filtrados[col]
                 else:
 
-                    logging.debug(f"Coluna {col} não encontrada nos dados filtrados, buscando receita de cálculo")
+                    logger.debug(f"Coluna {col} não encontrada nos dados filtrados, buscando receita de cálculo")
                     linha_calculo = data_map[data_map['Código'] == col.lower()].iloc[0]
-                    logging.debug(f"DataFrame após filtrar data_map: {linha_calculo}")
+                    logger.debug(f"DataFrame após filtrar data_map: {linha_calculo}")
 
 
                     colunas_calculo = eval(linha_calculo['Cálculo'])
-                    logging.debug(f"Colunas para cálculo: {colunas_calculo}")
+                    logger.debug(f"Colunas para cálculo: {colunas_calculo}")
 
                     for calc_col in colunas_calculo:
                         if calc_col not in self.dados_filtrados.columns:
                             raise ValueError(f"Coluna '{calc_col}' necessária para o cálculo de '{col}' não encontrada")
 
-                    logging.debug("Conjunto gerada com sucesso: %s", output_df.head())
+                    logger.debug("Conjunto gerada com sucesso: %s", output_df.head())
 
 
                     output_df[col] = self.dados_filtrados[colunas_calculo].sum(axis=1)

@@ -23,7 +23,7 @@ def mostrar_tabela_linhas():
     st.session_state[f'data_resumo_{conjunto_def}'] = df_linhas
 
 def processar_e1_preparacao_dados_b():
-    debug = True  # Defina como False para desativar os logs de depuração
+
 
     data_loader = DataLoader()
     st.write(nome_analise)

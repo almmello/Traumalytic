@@ -24,7 +24,7 @@ def carregar_dados():
         st.session_state['data'] = data_loader.carregar_dados()
 
 def processar_descritiva_estatisticas_clusters_pcl5():
-    debug = True  # Defina como False para desativar os logs de depuração
+
     APP_USER = os.getenv("ENV_USER")
     
     # Inicializar reset_counter no estado da sessão, se não existir
@@ -38,4 +38,4 @@ def processar_descritiva_estatisticas_clusters_pcl5():
     st.write('Estatísticas dos Clusters e do Escore Total do PCL-5:', resultados)
 
     # Carregar as conclusões
-    processar_conclusoes_tabela(analysis_id, resultados, nome_analise, instrucoes, debug)
+    processar_conclusoes_tabela(analysis_id, resultados, nome_analise, instrucoes)

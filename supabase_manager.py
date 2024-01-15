@@ -1,6 +1,16 @@
 from supabase import create_client, Client
 from dotenv import load_dotenv
 import os
+# Em seu módulo específico
+import logging
+
+# Obter um logger para o módulo atual
+logger = logging.getLogger(__name__)
+
+# Ajustar o nível do logger para DEBUG
+logger.setLevel(logging.DEBUG)
+
+
 
 class SupabaseManager:
     def __init__(self):
@@ -60,3 +70,33 @@ class SupabaseManager:
             id_conclusao = existing_data.data[0]['id']
             updated_data = {"conclusion": novo_resultado}
             return self.supabase.table("conclusions").update(updated_data).eq("id", id_conclusao).execute()
+        
+    def recuperar_resumo(self, analysis_id):
+        APP_USER = os.getenv("ENV_USER")  # Obter o usuário do sistema a partir da variável de ambiente
+        response = self.supabase.table("conclusions").select("*").eq("analysis_id", analysis_id).eq("user_id", APP_USER).eq("type", 'resumo').execute()
+
+        # Adicionando log para inspecionar a resposta
+        logger.debug(f"Resposta do Supabase: {response}")
+
+         # Ajuste para extrair corretamente o campo 'conclusion'
+        if response.data:
+            for item in response.data:
+                if 'conclusion' in item:
+                    resumo = item['conclusion']
+                    logger.debug(f"Resumo extraído: {resumo}")
+                    return resumo
+
+        logger.debug("Nenhum resumo encontrado.")
+        return None
+
+
+
+    def atualizar_resumo(self, analysis_id, novo_resumo):
+        APP_USER = os.getenv("ENV_USER")
+        dados_atualizados = {"conclusion": novo_resumo}
+        return self.supabase.table("conclusions").update(dados_atualizados).eq("analysis_id", analysis_id).eq("user_id", APP_USER).eq("type", 'resumo').execute()
+
+    
+    def apagar_resumo(self, analysis_id):
+        APP_USER = os.getenv("ENV_USER")
+        return self.supabase.table("conclusions").delete().eq("analysis_id", analysis_id).eq("user_id", APP_USER).eq("type", 'resumo').execute()

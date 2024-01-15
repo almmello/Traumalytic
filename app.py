@@ -2,6 +2,11 @@ import streamlit as st
 from auth import mostrar_tela_login
 from sidemenu import create_sidebar
 from data_loader import DataLoader
+import logging
+
+# Configuração global
+logging.basicConfig(level=logging.INFO)  # Define INFO como o nível global
+
 
 def main():
 

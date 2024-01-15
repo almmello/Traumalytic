@@ -27,7 +27,7 @@ def carregar_dados():
         st.session_state['data'] = data_loader.carregar_dados()
 
 def processar_corte_tept_pcl5():
-    debug = True  # Defina como False para desativar os logs de depuração
+
     APP_USER = os.getenv("ENV_USER")
     
 
@@ -50,5 +50,5 @@ def processar_corte_tept_pcl5():
     resultados = f"{estatisticas_gerais.to_string(index=False)}\n\n{frequencias.to_string(index=False)}"
     
     # Gerar conclusões baseadas nos resultados concatenados
-    processar_conclusoes_texto(analysis_id, resultados, nome_analise, instrucoes, debug)
+    processar_conclusoes_texto(analysis_id, resultados, nome_analise, instrucoes)
 

@@ -4,18 +4,24 @@ from supabase_manager import SupabaseManager
 from fig_management import FigManagement
 import streamlit as st
 import os
+import logging
 
+# Obter um logger para o módulo atual
+logger = logging.getLogger(__name__)
+
+# Ajustar o nível do logger para DEBUG
+logger.setLevel(logging.DEBUG)
 
 def carregar_conclusoes(analysis_id, etapa_analise, nome_analise, resultados=None, instrucoes=None):
 
     supabase_manager = SupabaseManager()
-    existing_conclusions = supabase_manager.recuperar_conclusoes(analysis_id)
+    conclusoes_existentes = supabase_manager.recuperar_conclusoes(analysis_id)
 
     # Filtrar conclusões que não são do tipo "resultado"
-    existing_conclusions = [conclusion for conclusion in existing_conclusions if conclusion['type'] != 'resultado']
+    conclusoes_existentes = [conclusion for conclusion in conclusoes_existentes if conclusion['type'] != 'resultado']
 
     # Verificar se existem conclusões anteriores
-    if not existing_conclusions:
+    if not conclusoes_existentes:
         # Gerar e inserir a primeira conclusão se não existir
         nova_conclusao = gerar_conclusao(analysis_id, etapa_analise, instrucoes, resultados)
         st.subheader(f"Nova Conclusão: {nome_analise}")
@@ -23,7 +29,7 @@ def carregar_conclusoes(analysis_id, etapa_analise, nome_analise, resultados=Non
     else:
         # Exibir o histórico de chat existente
         chat_history = sorted(
-            existing_conclusions,
+            conclusoes_existentes,
             key=lambda x: x['created_at']
         )
         contador = 1
@@ -67,37 +73,31 @@ def gerar_conclusao(analysis_id, etapa_analise, instrucoes, resultados):
     return texto_conclusao
 
 def gerar_nova_conclusao(analysis_id, etapa_analise, comentario, resultados=None, instrucoes=None):
-    debug = True  # Defina como False para desativar os logs de depuração
     supabase_manager = SupabaseManager()
     openai_interface = OpenAIInterface()
 
-    if debug:
-        print("\nIniciando a geração de nova conclusão para a análise ID:", analysis_id, "\n")
+    logger.debug("\nIniciando a geração de nova conclusão para a análise ID:", analysis_id, "\n")
 
     # Recuperar todas as conclusões existentes para a análise
-    existing_conclusions = supabase_manager.recuperar_conclusoes(analysis_id)
-    if debug:
-        print("\nConclusões existentes recuperadas:", existing_conclusions, "\n")
+    conclusoes_existentes = supabase_manager.recuperar_conclusoes(analysis_id)
+    logger.debug("\nConclusões existentes recuperadas:", conclusoes_existentes, "\n")
 
     # Solicitar à OpenAI para processar o chat e fornecer uma conclusão atualizada
-    response = openai_interface.criar_conclusao(instrucoes, resultados, comentario, existing_conclusions)  # "" representa instrucoes e resultados vazios
+    response = openai_interface.criar_conclusao(instrucoes, resultados, comentario, conclusoes_existentes)  # "" representa instrucoes e resultados vazios
     updated_conclusion = response.content
-    if debug:
-        print("\nResposta da OpenAI recebida:", updated_conclusion, "\n")
+    logger.debug("\nResposta da OpenAI recebida:", updated_conclusion, "\n")
 
     # Inserir o novo comentário e a conclusão atualizada no banco de dados
     supabase_manager.inserir_conclusao(analysis_id, etapa_analise, 'comentario', comentario, 'ativa')
-    if debug:
-        print("\nNovo comentário inserido no banco de dados para a análise ID:", analysis_id, "\n")
+    logger.debug("\nNovo comentário inserido no banco de dados para a análise ID:", analysis_id, "\n")
 
     supabase_manager.inserir_conclusao(analysis_id, etapa_analise, 'resposta', updated_conclusion, 'ativa')
-    if debug:
-        print("\nConclusão atualizada inserida no banco de dados para a análise ID:", analysis_id, "\n")
+    logger.debug("\nConclusão atualizada inserida no banco de dados para a análise ID:", analysis_id, "\n")
 
     return updated_conclusion
 
 def processar_visao_imagem(figura, prompt_text):
-    debug = True  # Defina como False para desativar os logs de depuração
+
     fig_manager = FigManagement()
     openai_interface = OpenAIInterface()
 
@@ -107,26 +107,23 @@ def processar_visao_imagem(figura, prompt_text):
     descricao = openai_interface.descrever_imagem_base64(imagem_base64, prompt_text)
     fig_manager.apagar_grafico(caminho_figura)
 
-    if debug:
-        print(f"Descrição da Imagem ({prompt_text}):", descricao)
+    logger.debug(f"Descrição da Imagem ({prompt_text}):", descricao)
 
     return descricao
 
-def processar_conclusoes_imagem(analysis_id, etapa_analise, fig, prompt_plot, nome_analise, instrucoes, debug):
+def processar_conclusoes_imagem(analysis_id, etapa_analise, fig, prompt_plot, nome_analise, instrucoes):
     supabase_manager = SupabaseManager()
-    existing_conclusions = supabase_manager.recuperar_conclusoes(analysis_id)
+    conclusoes_existentes = supabase_manager.recuperar_conclusoes(analysis_id)
 
-    if not existing_conclusions:
+    if not conclusoes_existentes:
         descricao_plot = processar_visao_imagem(fig, prompt_plot)
         resultados = f"Resultados {nome_analise}: {descricao_plot}"
 
-        if debug:
-            print("\nTexto para Geração de Conclusões: ", resultados, "\n")
+        logger.debug("\nTexto para Geração de Conclusões: ", resultados, "\n")
 
         gravacao_bem_sucedida = gravar_resultados(analysis_id, etapa_analise, resultados)
 
-        if debug:
-            print("\nRetorno Gravação: ", gravacao_bem_sucedida, "\n")
+        logger.debug("\nRetorno Gravação: ", gravacao_bem_sucedida, "\n")
 
         if gravacao_bem_sucedida:
             carregar_conclusoes(analysis_id, nome_analise, resultados, instrucoes)
@@ -139,23 +136,21 @@ def processar_conclusoes_imagem(analysis_id, etapa_analise, fig, prompt_plot, no
 
 
 
-def processar_conclusoes_tabela(analysis_id, tabela_resultados, nome_analise, instrucoes, debug):
+def processar_conclusoes_tabela(analysis_id, tabela_resultados, nome_analise, instrucoes):
     supabase_manager = SupabaseManager()
-    existing_conclusions = supabase_manager.recuperar_conclusoes(analysis_id)
+    conclusoes_existentes = supabase_manager.recuperar_conclusoes(analysis_id)
 
-    if not existing_conclusions:
+    if not conclusoes_existentes:
         # Formatar os resultados agrupados para texto
         texto_resultados = formatar_resultados_para_texto(tabela_resultados)
         resultados= f"Resultados {nome_analise}: {texto_resultados}"
 
-        if debug:
-            print("\nTexto para Geração de Conclusões: ", resultados, "\n")
+        logger.debug("\nTexto para Geração de Conclusões: ", resultados, "\n")
 
         # Gravar os resultados formatados
         gravacao_bem_sucedida = gravar_resultados(analysis_id, resultados)
 
-        if debug:
-            print("\nRetorno Gravação: ", gravacao_bem_sucedida, "\n")
+        logger.debug("\nRetorno Gravação: ", gravacao_bem_sucedida, "\n")
 
         if gravacao_bem_sucedida:
             carregar_conclusoes(analysis_id, nome_analise, resultados, instrucoes)
@@ -176,22 +171,20 @@ def formatar_resultados_para_texto(tabela_resultados):
     return texto
 
 
-def processar_conclusoes_texto(analysis_id, etapa_analise, texto_resultados, nome_analise, instrucoes, debug):
+def processar_conclusoes_texto(analysis_id, etapa_analise, texto_resultados, nome_analise, instrucoes):
     supabase_manager = SupabaseManager()
-    existing_conclusions = supabase_manager.recuperar_conclusoes(analysis_id)
+    conclusoes_existentes = supabase_manager.recuperar_conclusoes(analysis_id)
 
-    if not existing_conclusions:
+    if not conclusoes_existentes:
         # Preparar o texto dos resultados
         resultados = f"Resultados {nome_analise}: {texto_resultados}"
 
-        if debug:
-            print("\nTexto para Geração de Conclusões: ", resultados, "\n")
+        logger.debug("\nTexto para Geração de Conclusões: ", resultados, "\n")
 
         # Gravar os resultados formatados
         gravacao_bem_sucedida = gravar_resultados(analysis_id, etapa_analise, resultados)
 
-        if debug:
-            print("\nRetorno Gravação: ", gravacao_bem_sucedida, "\n")
+        logger.debug("\nRetorno Gravação: ", gravacao_bem_sucedida, "\n")
 
         if gravacao_bem_sucedida:
             carregar_conclusoes(analysis_id, etapa_analise, nome_analise, resultados, instrucoes)
@@ -204,13 +197,13 @@ def processar_conclusoes_texto(analysis_id, etapa_analise, texto_resultados, nom
             carregar_conclusoes(analysis_id, nome_analise, resultados, instrucoes)
 
 
-def processar_resultados(analysis_id, debug):
+def processar_resultados(analysis_id):
     supabase_manager = SupabaseManager()
-    resultados = supabase_manager.recuperar_resultado(analysis_id)
+    resultado = supabase_manager.recuperar_resultado(analysis_id)
 
-    if resultados:
+    if resultado:
         # Exibir resultados em um bloco de texto grande
-        resultado_atual = st.text_area("Resultados", resultados, key=f"resultados_{analysis_id}")
+        resultado_atual = st.text_area("Resultados", resultado, key=f"resultados_{analysis_id}")
 
         # Botão para atualizar resultados
         if st.button("Atualizar Resultados", key=f"atualizar_{analysis_id}"):
@@ -226,6 +219,59 @@ def processar_resultados(analysis_id, debug):
             if st.button("Atualizar Resultados", key=f"atualizar_{analysis_id}"):
                 supabase_manager.atualizar_resultado(analysis_id, resultado_atual)
                 st.rerun()
+
+
+
+def processar_resumo(analysis_id, etapa_analise, nome_analise):
+    supabase_manager = SupabaseManager()
+    logger.debug(f"Recuperando resumo para analysis_id: {analysis_id}")
+    resumo = supabase_manager.recuperar_resumo(analysis_id)
+    logger.debug(f"Resumo recuperado: {resumo}")
+
+    if resumo:
+        logger.debug("Resumo encontrado no Supabase.")
+        resumo_atual = st.text_area("Resumo", resumo, height=300, key=f"resumo_{analysis_id}")
+
+        col1, col2 = st.columns(2)
+        with col1:
+            if st.button("Atualizar Resumo", key=f"atualizar_resumo_{analysis_id}"):
+                logger.debug("Atualizando resumo no Supabase.")
+                supabase_manager.atualizar_resumo(analysis_id, resumo_atual)
+                st.rerun()
+        with col2:
+            if st.button("Apagar Resumo", key=f"apagar_resumo_{analysis_id}"):
+                logger.debug("Apagando resumo no Supabase.")
+                supabase_manager.apagar_resumo(analysis_id)
+                st.rerun()
+    else:
+        openai_interface = OpenAIInterface()
+        logger.debug("Resumo não encontrado.")
+        if st.button("Gerar Resumo", key=f"gerar_resumo_{analysis_id}"):
+            logger.debug("Gerando novo resumo com OpenAI.")
+            historico_conclusoes = supabase_manager.recuperar_conclusoes(analysis_id)
+            resultado_atual = supabase_manager.recuperar_resultado(analysis_id)
+
+            novo_resumo = openai_interface.criar_resumo(nome_analise, resultado_atual, historico_conclusoes)
+            if novo_resumo:
+                logger.debug("Resumo gerado com sucesso.")
+                supabase_manager.inserir_conclusao(analysis_id, etapa_analise, "resumo", novo_resumo, "ativa")
+                resumo_atual = st.text_area("Resumo", novo_resumo, height=300, key=f"resumo_{analysis_id}")
+                logger.debug(f"Resumo atual do texto: {resumo_atual}")
+
+                col1, col2 = st.columns(2)
+                with col1:
+                    if st.button("Atualizar Resumo", key=f"atualizar_resumo_{analysis_id}"):
+                        logger.debug("Atualizando resumo no Supabase.")
+                        supabase_manager.atualizar_resumo(analysis_id, resumo_atual)
+                        st.rerun()
+                with col2:
+                    if st.button("Apagar Resumo", key=f"apagar_resumo_{analysis_id}"):
+                        logger.debug("Apagando resumo no Supabase.")
+                        supabase_manager.apagar_resumo(analysis_id)
+                        st.rerun()
+            else:
+                logger.debug("Falha ao gerar o novo resumo.")
+                st.error("Não foi possível gerar um novo resumo. Tente novamente mais tarde.")
 
 
     

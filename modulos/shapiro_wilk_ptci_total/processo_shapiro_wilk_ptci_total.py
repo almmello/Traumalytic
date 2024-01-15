@@ -22,7 +22,7 @@ def carregar_dados():
         st.session_state['data'] = data_loader.carregar_dados()
 
 def processar_shapiro_wilk_ptci_total():
-    debug = True  # Defina como False para desativar os logs de depuração
+
     APP_USER = os.getenv("ENV_USER")
     
     # Inicializar reset_counter no estado da sessão, se não existir
@@ -35,4 +35,4 @@ def processar_shapiro_wilk_ptci_total():
     st.write('Teste de Shapiro-Wilk para PTCI Total:', resultados)
 
     # Carregar as conclusões
-    processar_conclusoes_tabela(analysis_id, resultados, nome_analise, instrucoes, debug)
+    processar_conclusoes_tabela(analysis_id, resultados, nome_analise, instrucoes)

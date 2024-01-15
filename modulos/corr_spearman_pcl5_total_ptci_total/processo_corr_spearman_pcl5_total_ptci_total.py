@@ -26,7 +26,7 @@ def carregar_dados():
         st.session_state['data'] = data_loader.carregar_dados()
 
 def processar_corr_spearman_pcl5_total_ptci_total():
-    debug = True  # Defina como False para desativar os logs de depuração
+
     APP_USER = os.getenv("ENV_USER")
 
     # Inicializar reset_counter no estado da sessão, se não existir
@@ -40,4 +40,4 @@ def processar_corr_spearman_pcl5_total_ptci_total():
     st.pyplot(fig)
 
     # Processar resultados da Análise
-    processar_conclusoes_imagem(analysis_id, fig, prompt_plot, nome_analise, instrucoes, debug)
+    processar_conclusoes_imagem(analysis_id, fig, prompt_plot, nome_analise, instrucoes)

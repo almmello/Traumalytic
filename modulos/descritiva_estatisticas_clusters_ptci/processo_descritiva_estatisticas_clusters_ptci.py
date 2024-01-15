@@ -24,7 +24,7 @@ def carregar_dados():
         st.session_state['data'] = data_loader.carregar_dados()
 
 def processar_descritiva_estatisticas_clusters_ptci():
-    debug = True  # Defina como False para desativar os logs de depuração
+
     APP_USER = os.getenv("ENV_USER")
     
 
@@ -37,4 +37,4 @@ def processar_descritiva_estatisticas_clusters_ptci():
     resultados = calcular_descritiva_estatisticas_clusters_ptci(st.session_state['data'])
     st.write('Estatísticas dos Clusters e do Escore Total do PTCI:', resultados)
 
-    processar_conclusoes_tabela(analysis_id, resultados, nome_analise, instrucoes, debug)
+    processar_conclusoes_tabela(analysis_id, resultados, nome_analise, instrucoes)

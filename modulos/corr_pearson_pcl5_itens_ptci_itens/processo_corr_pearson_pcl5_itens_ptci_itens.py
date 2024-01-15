@@ -26,7 +26,7 @@ def carregar_dados():
         st.session_state['data'] = data_loader.carregar_dados()
 
 def processar_corr_pearson_pcl5_itens_ptci_itens():
-    debug = True  # Defina como False para desativar os logs de depuração
+
     APP_USER = os.getenv("ENV_USER")
 
     # Inicializar reset_counter no estado da sessão, se não existir
@@ -42,4 +42,4 @@ def processar_corr_pearson_pcl5_itens_ptci_itens():
     # st.dataframe(resultados)
 
     # Carregar as conclusões
-    processar_conclusoes_tabela(analysis_id, resultados, nome_analise, instrucoes, debug)
+    processar_conclusoes_tabela(analysis_id, resultados, nome_analise, instrucoes)
