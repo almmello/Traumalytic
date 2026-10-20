@@ -23,12 +23,18 @@ def carregar_conclusoes(analysis_id, nome_analise, resultados=None, instrucoes=N
             existing_conclusions,
             key=lambda x: x['created_at']
         )
+        contador = 1
+        st.subheader('Conclusão:')
         for message in chat_history:
             if message['type'] == 'response':
-                st.subheader('Conclusão: ' + nome_analise)
+                
+                st.subheader(f'Conclusão {contador:02d}')                
             elif message['type'] == 'comment':
-                st.subheader('Comentário:')
+                contador -= 1
+                st.subheader(f'Comentário {contador:02d}')
+            
             st.markdown(message['conclusion'])
+            contador += 1
 
     # Caixa de texto e botão para comentários
     comentario = st.text_area("Faça comentários sobre a conclusão de forma que possa ser atualizada:", key=f"comment_{st.session_state['reset_counter']}")
