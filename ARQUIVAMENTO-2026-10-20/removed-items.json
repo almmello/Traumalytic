@@ -1,0 +1,62 @@
+[
+  {
+    "RelativePath": "__pycache__",
+    "Kind": "directory"
+  },
+  {
+    "RelativePath": "fig_temp",
+    "Kind": "directory"
+  },
+  {
+    "RelativePath": "modulos\\__pycache__",
+    "Kind": "directory"
+  },
+  {
+    "RelativePath": "modulos\\corte_tept_pcl5\\__pycache__",
+    "Kind": "directory"
+  },
+  {
+    "RelativePath": "modulos\\descritiva_estatisticas_clusters_pcl5\\__pycache__",
+    "Kind": "directory"
+  },
+  {
+    "RelativePath": "modulos\\descritiva_estatisticas_clusters_ptci\\__pycache__",
+    "Kind": "directory"
+  },
+  {
+    "RelativePath": "modulos\\descritiva_estatisticas_idade\\__pycache__",
+    "Kind": "directory"
+  },
+  {
+    "RelativePath": "modulos\\descritiva_estatisticas_itens_pcl5\\__pycache__",
+    "Kind": "directory"
+  },
+  {
+    "RelativePath": "modulos\\descritiva_estatisticas_itens_ptci\\__pycache__",
+    "Kind": "directory"
+  },
+  {
+    "RelativePath": "modulos\\normalidade_escore_total_pcl5\\__pycache__",
+    "Kind": "directory"
+  },
+  {
+    "RelativePath": "modulos\\sumario_estatistico_pcl5\\__pycache__",
+    "Kind": "directory"
+  },
+  {
+    "RelativePath": "modulos\\sumario_estatistico_ptci\\__pycache__",
+    "Kind": "directory"
+  },
+  {
+    "RelativePath": "modulos\\visualizacao_itens_clusters_pcl5\\__pycache__",
+    "Kind": "directory"
+  },
+  {
+    "RelativePath": "modulos\\visualizacao_itens_clusters_ptci\\__pycache__",
+    "Kind": "directory"
+  },
+  {
+    "RelativePath": "venv",
+    "Kind": "directory"
+  }
+]

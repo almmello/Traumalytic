@@ -1,0 +1,16 @@
+{
+  "captured_at_utc": "2026-10-20T19:11:32.6299595Z",
+  "environment": "Development",
+  "git_branch": "codex/archive-development-2026-10-20",
+  "git_commit": "302122c96224a45022a75b20de77871957ae999e",
+  "python": {
+    "version": "3.11.5 (tags/v3.11.5:cce6ba9, Aug 24 2023, 14:38:34) [MSC v.1936 64 bit (AMD64)]",
+    "implementation": "CPython",
+    "architecture": "64bit",
+    "platform": "Windows-10-10.0.26300-SP0"
+  },
+  "package_count": 85,
+  "freeze_command": "python -B -m pip freeze --all",
+  "list_command": "python -B -m pip list --format=json",
+  "validation_scope": "Inventario do ambiente instalado; aplicacao e reinstalacao nao testadas"
+}

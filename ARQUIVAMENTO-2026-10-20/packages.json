@@ -1,0 +1,342 @@
+[
+  {
+    "name": "altair",
+    "version": "5.2.0"
+  },
+  {
+    "name": "annotated-types",
+    "version": "0.6.0"
+  },
+  {
+    "name": "anyio",
+    "version": "4.2.0"
+  },
+  {
+    "name": "attrs",
+    "version": "23.1.0"
+  },
+  {
+    "name": "blinker",
+    "version": "1.7.0"
+  },
+  {
+    "name": "cachetools",
+    "version": "5.3.2"
+  },
+  {
+    "name": "certifi",
+    "version": "2023.11.17"
+  },
+  {
+    "name": "cffi",
+    "version": "1.16.0"
+  },
+  {
+    "name": "charset-normalizer",
+    "version": "3.3.2"
+  },
+  {
+    "name": "click",
+    "version": "8.1.7"
+  },
+  {
+    "name": "colorama",
+    "version": "0.4.6"
+  },
+  {
+    "name": "contourpy",
+    "version": "1.2.0"
+  },
+  {
+    "name": "cryptography",
+    "version": "41.0.7"
+  },
+  {
+    "name": "cycler",
+    "version": "0.12.1"
+  },
+  {
+    "name": "deprecation",
+    "version": "2.1.0"
+  },
+  {
+    "name": "distro",
+    "version": "1.8.0"
+  },
+  {
+    "name": "et-xmlfile",
+    "version": "1.1.0"
+  },
+  {
+    "name": "fonttools",
+    "version": "4.47.0"
+  },
+  {
+    "name": "git-ignore",
+    "version": "1.0.2"
+  },
+  {
+    "name": "gitdb",
+    "version": "4.0.11"
+  },
+  {
+    "name": "GitPython",
+    "version": "3.1.40"
+  },
+  {
+    "name": "gotrue",
+    "version": "2.1.0"
+  },
+  {
+    "name": "h11",
+    "version": "0.14.0"
+  },
+  {
+    "name": "httpcore",
+    "version": "0.17.3"
+  },
+  {
+    "name": "httpx",
+    "version": "0.24.1"
+  },
+  {
+    "name": "idna",
+    "version": "3.6"
+  },
+  {
+    "name": "importlib-metadata",
+    "version": "6.11.0"
+  },
+  {
+    "name": "Jinja2",
+    "version": "3.1.2"
+  },
+  {
+    "name": "jsonschema",
+    "version": "4.20.0"
+  },
+  {
+    "name": "jsonschema-specifications",
+    "version": "2023.11.2"
+  },
+  {
+    "name": "kiwisolver",
+    "version": "1.4.5"
+  },
+  {
+    "name": "markdown-it-py",
+    "version": "3.0.0"
+  },
+  {
+    "name": "MarkupSafe",
+    "version": "2.1.3"
+  },
+  {
+    "name": "matplotlib",
+    "version": "3.8.2"
+  },
+  {
+    "name": "mdurl",
+    "version": "0.1.2"
+  },
+  {
+    "name": "numpy",
+    "version": "1.26.2"
+  },
+  {
+    "name": "openai",
+    "version": "1.5.0"
+  },
+  {
+    "name": "openpyxl",
+    "version": "3.1.2"
+  },
+  {
+    "name": "packaging",
+    "version": "23.2"
+  },
+  {
+    "name": "pandas",
+    "version": "2.1.4"
+  },
+  {
+    "name": "Pillow",
+    "version": "10.1.0"
+  },
+  {
+    "name": "pip",
+    "version": "23.3.2"
+  },
+  {
+    "name": "postgrest",
+    "version": "0.13.0"
+  },
+  {
+    "name": "protobuf",
+    "version": "4.25.1"
+  },
+  {
+    "name": "pyarrow",
+    "version": "14.0.2"
+  },
+  {
+    "name": "pycparser",
+    "version": "2.21"
+  },
+  {
+    "name": "pydantic",
+    "version": "2.5.2"
+  },
+  {
+    "name": "pydantic_core",
+    "version": "2.14.5"
+  },
+  {
+    "name": "pydeck",
+    "version": "0.8.1b0"
+  },
+  {
+    "name": "Pygments",
+    "version": "2.17.2"
+  },
+  {
+    "name": "pyparsing",
+    "version": "3.1.1"
+  },
+  {
+    "name": "python-dateutil",
+    "version": "2.8.2"
+  },
+  {
+    "name": "python-dotenv",
+    "version": "1.0.0"
+  },
+  {
+    "name": "pytz",
+    "version": "2023.3.post1"
+  },
+  {
+    "name": "realtime",
+    "version": "1.0.2"
+  },
+  {
+    "name": "referencing",
+    "version": "0.32.0"
+  },
+  {
+    "name": "requests",
+    "version": "2.31.0"
+  },
+  {
+    "name": "rich",
+    "version": "13.7.0"
+  },
+  {
+    "name": "rpds-py",
+    "version": "0.15.2"
+  },
+  {
+    "name": "scipy",
+    "version": "1.11.4"
+  },
+  {
+    "name": "seaborn",
+    "version": "0.13.0"
+  },
+  {
+    "name": "setuptools",
+    "version": "65.5.0"
+  },
+  {
+    "name": "six",
+    "version": "1.16.0"
+  },
+  {
+    "name": "smmap",
+    "version": "5.0.1"
+  },
+  {
+    "name": "sniffio",
+    "version": "1.3.0"
+  },
+  {
+    "name": "st-pages",
+    "version": "0.4.5"
+  },
+  {
+    "name": "storage3",
+    "version": "0.7.0"
+  },
+  {
+    "name": "streamlit",
+    "version": "1.29.0"
+  },
+  {
+    "name": "StrEnum",
+    "version": "0.4.15"
+  },
+  {
+    "name": "supabase",
+    "version": "2.3.0"
+  },
+  {
+    "name": "supafunc",
+    "version": "0.3.1"
+  },
+  {
+    "name": "tabulate",
+    "version": "0.9.0"
+  },
+  {
+    "name": "tenacity",
+    "version": "8.2.3"
+  },
+  {
+    "name": "toml",
+    "version": "0.10.2"
+  },
+  {
+    "name": "toolz",
+    "version": "0.12.0"
+  },
+  {
+    "name": "tornado",
+    "version": "6.4"
+  },
+  {
+    "name": "tqdm",
+    "version": "4.66.1"
+  },
+  {
+    "name": "typing_extensions",
+    "version": "4.9.0"
+  },
+  {
+    "name": "tzdata",
+    "version": "2023.3"
+  },
+  {
+    "name": "tzlocal",
+    "version": "5.2"
+  },
+  {
+    "name": "urllib3",
+    "version": "2.1.0"
+  },
+  {
+    "name": "validators",
+    "version": "0.22.0"
+  },
+  {
+    "name": "watchdog",
+    "version": "3.0.0"
+  },
+  {
+    "name": "websockets",
+    "version": "11.0.3"
+  },
+  {
+    "name": "zipp",
+    "version": "3.17.0"
+  }
+]

@@ -1,0 +1,18 @@
+Traumalytic - registro do ambiente antes da limpeza em 20/10/2026.
+Pasta: Development
+Branch: codex/archive-development-2026-10-20
+Commit: 302122c96224a45022a75b20de77871957ae999e
+Python original: 3.11.5 (arquitetura em environment.json).
+requirements.freeze.txt: todas as distribuicoes instaladas, incluindo ferramentas como pip/setuptools.
+packages.json: segunda listagem estruturada das distribuicoes e versoes.
+pyvenv-original.cfg: configuracao original do ambiente removido; caminhos sao historicos.
+requirements.txt original do projeto foi preservado.
+
+Para tentar recriar em Windows com Python 3.11.5, na raiz do clone:
+python -m venv venv
+.\venv\Scripts\python.exe -m pip install -r .\ARQUIVAMENTO-2026-10-20\requirements.freeze.txt
+
+A exportacao registra versoes, mas nao inclui os instaladores das dependencias.
+Disponibilidade de pacotes, reinstalacao e funcionamento da aplicacao nao foram testados.
+O .env permanece privado na raiz; seus valores nao foram incluidos neste registro.
+O registro e a limpeza sao locais; nenhum commit ou push desta etapa foi feito.
