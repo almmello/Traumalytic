@@ -1,0 +1,13 @@
+{
+  "environment": "Production",
+  "completed_at_utc": "2026-10-20T19:14:28.9986275Z",
+  "removed_directories": 41,
+  "removed_standalone_temporary_files": 1,
+  "removed_files_total": 45413,
+  "removed_bytes": 760159369,
+  "preserved_files_sha256_verified": 438,
+  "dependency_packages_recorded": 92,
+  "recycle_bin_used": false,
+  "git_commit_or_push_performed": false,
+  "verification": "All pre-existing retained files, including .git, .env, data, source code and dependency exports, were compared by SHA-256 after removal. Audit files created during cleanup are excluded from the pre-cleanup manifest."
+}

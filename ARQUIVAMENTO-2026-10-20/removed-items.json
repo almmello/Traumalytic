@@ -1,0 +1,170 @@
+[
+  {
+    "RelativePath": "__pycache__",
+    "Kind": "directory"
+  },
+  {
+    "RelativePath": "modulos\\__pycache__",
+    "Kind": "directory"
+  },
+  {
+    "RelativePath": "modulos\\app_config\\__pycache__",
+    "Kind": "directory"
+  },
+  {
+    "RelativePath": "modulos\\boxplot_pcl5\\__pycache__",
+    "Kind": "directory"
+  },
+  {
+    "RelativePath": "modulos\\boxplot_ptci\\__pycache__",
+    "Kind": "directory"
+  },
+  {
+    "RelativePath": "modulos\\caule_folhas_pcl5\\__pycache__",
+    "Kind": "directory"
+  },
+  {
+    "RelativePath": "modulos\\caule_folhas_ptci\\__pycache__",
+    "Kind": "directory"
+  },
+  {
+    "RelativePath": "modulos\\corr_pearson_pcl5_clusters_ptci_clusters\\__pycache__",
+    "Kind": "directory"
+  },
+  {
+    "RelativePath": "modulos\\corr_pearson_pcl5_itens_ptci_itens\\__pycache__",
+    "Kind": "directory"
+  },
+  {
+    "RelativePath": "modulos\\corr_pearson_pcl5_total_ptci_total\\__pycache__",
+    "Kind": "directory"
+  },
+  {
+    "RelativePath": "modulos\\corr_spearman_pcl5_clusters_ptci_clusters\\__pycache__",
+    "Kind": "directory"
+  },
+  {
+    "RelativePath": "modulos\\corr_spearman_pcl5_itens_ptci_itens\\__pycache__",
+    "Kind": "directory"
+  },
+  {
+    "RelativePath": "modulos\\corr_spearman_pcl5_total_ptci_total\\__pycache__",
+    "Kind": "directory"
+  },
+  {
+    "RelativePath": "modulos\\corte_tept_pcl5\\__pycache__",
+    "Kind": "directory"
+  },
+  {
+    "RelativePath": "modulos\\descritiva_estatisticas_clusters_pcl5\\__pycache__",
+    "Kind": "directory"
+  },
+  {
+    "RelativePath": "modulos\\descritiva_estatisticas_clusters_ptci\\__pycache__",
+    "Kind": "directory"
+  },
+  {
+    "RelativePath": "modulos\\descritiva_estatisticas_idade\\__pycache__",
+    "Kind": "directory"
+  },
+  {
+    "RelativePath": "modulos\\descritiva_estatisticas_itens_pcl5\\__pycache__",
+    "Kind": "directory"
+  },
+  {
+    "RelativePath": "modulos\\descritiva_estatisticas_itens_ptci\\__pycache__",
+    "Kind": "directory"
+  },
+  {
+    "RelativePath": "modulos\\detrended_qq_pcl5\\__pycache__",
+    "Kind": "directory"
+  },
+  {
+    "RelativePath": "modulos\\detrended_qq_ptci\\__pycache__",
+    "Kind": "directory"
+  },
+  {
+    "RelativePath": "modulos\\e1_conclusao\\__pycache__",
+    "Kind": "directory"
+  },
+  {
+    "RelativePath": "modulos\\e1_preparacao_dados_a\\__pycache__",
+    "Kind": "directory"
+  },
+  {
+    "RelativePath": "modulos\\e1_preparacao_dados_b\\__pycache__",
+    "Kind": "directory"
+  },
+  {
+    "RelativePath": "modulos\\estatisticas_variaveis_categoricas\\__pycache__",
+    "Kind": "directory"
+  },
+  {
+    "RelativePath": "modulos\\histograma_pcl5\\__pycache__",
+    "Kind": "directory"
+  },
+  {
+    "RelativePath": "modulos\\histograma_ptci\\__pycache__",
+    "Kind": "directory"
+  },
+  {
+    "RelativePath": "modulos\\normalidade_escore_total_pcl5\\__pycache__",
+    "Kind": "directory"
+  },
+  {
+    "RelativePath": "modulos\\probabilidade_normal_pcl5\\__pycache__",
+    "Kind": "directory"
+  },
+  {
+    "RelativePath": "modulos\\probabilidade_normal_ptci\\__pycache__",
+    "Kind": "directory"
+  },
+  {
+    "RelativePath": "modulos\\shapiro_wilk_pcl5_total\\__pycache__",
+    "Kind": "directory"
+  },
+  {
+    "RelativePath": "modulos\\shapiro_wilk_ptci_total\\__pycache__",
+    "Kind": "directory"
+  },
+  {
+    "RelativePath": "modulos\\sumario_estatistico_pcl5\\__pycache__",
+    "Kind": "directory"
+  },
+  {
+    "RelativePath": "modulos\\sumario_estatistico_ptci\\__pycache__",
+    "Kind": "directory"
+  },
+  {
+    "RelativePath": "modulos\\teste_ks_pcl5_total\\__pycache__",
+    "Kind": "directory"
+  },
+  {
+    "RelativePath": "modulos\\teste_ks_ptci_total\\__pycache__",
+    "Kind": "directory"
+  },
+  {
+    "RelativePath": "modulos\\teste_t_pcl5_clusters_ptci_clusters\\__pycache__",
+    "Kind": "directory"
+  },
+  {
+    "RelativePath": "modulos\\teste_t_pcl5_total_ptci_total\\__pycache__",
+    "Kind": "directory"
+  },
+  {
+    "RelativePath": "modulos\\visualizacao_itens_clusters_pcl5\\__pycache__",
+    "Kind": "directory"
+  },
+  {
+    "RelativePath": "modulos\\visualizacao_itens_clusters_ptci\\__pycache__",
+    "Kind": "directory"
+  },
+  {
+    "RelativePath": "venv",
+    "Kind": "directory"
+  },
+  {
+    "RelativePath": ".DS_Store",
+    "Kind": "file"
+  }
+]
